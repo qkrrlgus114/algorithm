@@ -1,15 +1,12 @@
+import java.util.*;
 class Solution {
     public int solution(int[] nums) {
-        int[] count = new int[200001];
+        HashSet<Integer> map = new HashSet<>();
         for(int i=0; i<nums.length; i++){
-            count[nums[i]]++;
+            map.add(nums[i]);
         }
         int possible = nums.length/2;
-        int cnt = 0;
-        for(int i=0; i<count.length; i++){
-            if(count[i]!=0) cnt++;
-        }
-        if(possible<cnt) return possible;
-        else return cnt;
+        if(map.size() < possible) return map.size();
+        else return possible;
     }
 }
