@@ -2,14 +2,9 @@ import sys
 
 arr = []
 for i in range(9):
-  arr.append(int(sys.stdin.readline().strip()))
+  arr.append(int(sys.stdin.readline()))
 
-max_value = 0
-idx = 0
-for i in range(9):
-  if max_value < arr[i]:
-    max_value = arr[i]
-    idx = i+1
-    
+max_value = max(arr)
+max_idx = arr.index(max_value)
 print(max_value)
-print(idx)
+print(max_idx+1)
