@@ -1,25 +1,19 @@
 import sys
 
-N = int(sys.stdin.readline().strip())
-result = []
-arr = []
+N = int(sys.stdin.readline())
+
 for i in range(N):
-  arr.append(sys.stdin.readline().strip())
-  
-for i in range(N):
+  check = list(sys.stdin.readline().strip())
   sum = 0
-  point = 0
-  temp_point = 1
-  for j in range(len(arr[i])):
-    if arr[i][j]=='O':
-      point+=temp_point
-      temp_point+=1
+  temp = 1
+  temp_sum = 0
+  for i in range(len(check)):
+    if check[i] == 'O':
+      temp_sum += temp
+      temp += 1
     else:
-      sum+=point
-      point=0
-      temp_point=1
-    if j == len(arr[i])-1: sum+=point
-  result.append(sum)
-      
-for i in range(N):
-  print(result[i])
+      sum += temp_sum
+      temp = 1
+      temp_sum = 0
+  if temp_sum != 0: sum+=temp_sum
+  print(sum)
