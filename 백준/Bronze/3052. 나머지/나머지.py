@@ -1,6 +1,6 @@
 arr = []
-for i in range(0,10):
-  arr.append(int(input())%42)
-
-temp = set(arr)
-print(len(temp))
+for i in range(10):
+    a = int(input())
+    if a%42 not in arr:
+        arr.append(a % 42)
+print(len(arr))
