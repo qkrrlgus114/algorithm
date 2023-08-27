@@ -1,25 +1,19 @@
-import sys
-from collections import deque
+# 1. 현재 위치 이후보다 저렴한 곳이 있으면 거기까지 기름을 구매.
+# 2. 기름 가격중에서 가장 저렴한 곳을 잡아놓고 현재 위치가 거기에 오면 남은 기름 전부 구매
 
-N = int(sys.stdin.readline().strip())
-dis = deque(list(map(int, sys.stdin.readline().strip().split())))
-city = deque(list(map(int, sys.stdin.readline().strip().split())))
-target = city[0]
-oil = 0
-i=0
-while i!=len(city)-1:
-  flag = True
-  for j in range(i+1,N-1):
-    if target > city[j]: 
-      target = city[j]
-      flag = False
-      break
-  if flag == True:
-    for j in range(i,N-1):
-      oil += city[i]*dis[j]
-    break
-  elif flag == False:
-    oil += city[i]*dis[i]
-    i+=1
-    
-print(oil)
+
+import sys
+
+N = int(sys.stdin.readline())
+dis = list(map(int, sys.stdin.readline().split()))
+oil_price = list(map(int,sys.stdin.readline().split()))
+
+result = 0
+cur_oil_price = oil_price[0]
+
+for i in range(N - 1):
+    if cur_oil_price > oil_price[i]:
+        cur_oil_price = oil_price[i]
+    result += dis[i] * cur_oil_price
+
+print(result)
