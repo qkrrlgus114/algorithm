@@ -1,13 +1,17 @@
+# 1. 오름차순 기준으로 정렬
+
 import sys
-from collections import deque
 
 N = int(sys.stdin.readline())
-arr = deque(list(map(int, sys.stdin.readline().strip().split())))
+arr = list(map(int ,sys.stdin.readline().split()))
 
-narr = sorted(arr)
-sum = 0
+# 정렬
+arr.sort()
+
+count = 0
 result = 0
+
 for i in range(N):
-  sum+=narr[i]
-  result += sum
+    count += arr[i]
+    result += count
 print(result)
