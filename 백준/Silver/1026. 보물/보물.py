@@ -1,19 +1,23 @@
 import sys
-from collections import deque
 
-N = int(sys.stdin.readline().strip())
-A = deque(list(map(int, sys.stdin.readline().strip().split())))
-B = deque(list(map(int, sys.stdin.readline().strip().split())))
+N = int(sys.stdin.readline())
 
-A = sorted(A,reverse=True)
-result = 0
+A = list(map(int, sys.stdin.readline().split()))
+B = list(map(int, sys.stdin.readline().split()))
 
-for i in A:
-  min_B = min(B)
-  result += min_B * i
-  for temp in B:
-    if temp == min_B:
-      B.remove(temp)
-      break
+A.sort()
 
-print(result)
+sum = 0
+
+
+for i in range(len(A)):
+    temp = 0
+    idx = 0
+    for j in range(len(B)):
+        if temp < B[j]:
+            temp = B[j]
+            idx = j
+    sum += temp * A[i]
+    B[idx] = -1
+
+print(sum)
