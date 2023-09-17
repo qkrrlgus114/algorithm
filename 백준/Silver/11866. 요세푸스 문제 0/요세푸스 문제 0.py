@@ -1,23 +1,18 @@
 import sys
 from collections import deque
 
-N, cycle = map(int,sys.stdin.readline().strip().split())
+N, K = map(int, sys.stdin.readline().split())
 
-arr = deque()
+q = deque()
 
-for i in range(1,N+1):
-  arr.append(i)
-
-result = "<"
 for i in range(N):
-  temp = 1
-  while temp!=cycle:
-    temp_value = arr.popleft()
-    arr.append(temp_value)
-    temp+=1
-  if i == N-1:
-    result = result + str(arr.popleft()) + ">"
-  else:
-    result = result + str(arr.popleft()) + ", "
-    
-print(result)
+    q.append(i+1)
+print("<", end="")
+while q:
+    for i in range(K - 1):
+        temp = q.popleft()
+        q.append(temp)
+    if len(q) == 1:
+        print(q.popleft(), end=">")
+    else:
+        print(q.popleft(), end=", ")
