@@ -1,0 +1,23 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
+        String s = bf.readLine();
+        int N = Integer.parseInt(s);
+
+        int result = 0;
+        s = bf.readLine();
+        for(char c : s.toCharArray()){
+            result += c - 48;
+        }
+
+        System.out.println(result);
+
+    }
+}
