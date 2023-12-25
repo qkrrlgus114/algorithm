@@ -10,30 +10,22 @@ public class Main {
         String s = bf.readLine();
         int N = Integer.parseInt(s);
 
-        int[] arr = new int[N];
-        for(int i=0; i<N; i++){
-            arr[i] = i + 1;
-        }
-
-        int start = 0;
-        int end = 0;
+        int start = 1;
+        int end = 1;
         int count = 1;
+        int sum = 1;
 
-        while(end != N-1){
-            int sum = 0;
-            for(int i=start; i<=end; i++){
-                sum += arr[i];
-            }
+        while(end != N){
 
             if(sum > N){
-                sum -= arr[start];
+                sum -= start;
                 start++;
             }else if(sum < N){
                 end++;
-                sum += arr[end];
+                sum += end;
             }else{
                 end++;
-                sum += arr[end];
+                sum += end;
                 count++;
             }
         }
