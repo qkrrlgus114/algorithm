@@ -11,20 +11,20 @@ public class Main {
         String s = bf.readLine();
         int N = Integer.parseInt(s);
 
-        Deque<Integer> q = new LinkedList<>();
+        Queue<Integer> q = new LinkedList<>();
         for(int i=1; i<=N; i++){
             q.add(i);
         }
 
         while(q.size() != 1){
-            q.pop();
+            q.poll();
             if(q.size() == 1){
                 break;
             }
-            q.addLast(q.pop());
+            q.add(q.poll());
         }
 
-        System.out.println(q.pop());
+        System.out.println(q.poll());
 
 
     }
