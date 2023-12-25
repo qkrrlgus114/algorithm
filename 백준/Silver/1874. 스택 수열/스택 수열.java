@@ -11,46 +11,40 @@ public class Main {
 
         String s = bf.readLine();
         int N = Integer.parseInt(s);
-
-        Stack<Integer> s1 = new Stack<>();
-        Stack<Integer> s2 = new Stack<>();
-
-        for (int i = N; i >= 1; i--) {
-            s2.push(i);
+        int[] arr = new int[N];
+        for(int i=0; i<N; i++){
+            s = bf.readLine();
+            arr[i] = Integer.parseInt(s);
         }
 
+        Stack<Integer> stack = new Stack<>();
         StringBuilder sb = new StringBuilder();
+
+        // 1부터 N까지 판단하는 값
+        int cur = 1;
         boolean check = false;
 
-        while(!s1.isEmpty() || !s2.isEmpty()){
-            s = bf.readLine();
-            int M = Integer.parseInt(s);
-
-            while(true){
-                if(!s1.isEmpty() && s1.peek() == M){
+        for(int i=0; i<N; i++){
+            if(arr[i] >= cur){
+                while(true){
+                    if(arr[i] > cur){
+                        stack.push(cur++);
+                        sb.append("+\n");
+                    }else{
+                        sb.append("+\n");
+                        cur++;
+                        sb.append("-\n");
+                        break;
+                    }
+                }
+            }else{
+                if(stack.peek() == arr[i]){
+                    stack.pop();
                     sb.append("-\n");
-                    s1.pop();
-                    break;
-                } else if (s2.isEmpty() && s1.peek() != M) {
+                }else{
                     System.out.println("NO");
-                    s1.clear();
-                    s2.clear();
                     check = true;
                     break;
-                } else if(!s2.isEmpty() && s2.peek() == M){
-                    sb.append("+\n");
-                    sb.append("-\n");
-                    s2.pop();
-                    break;
-                }else if(!s2.isEmpty() && s2.peek() > M){
-                    System.out.println("NO");
-                    s1.clear();
-                    s2.clear();
-                    check = true;
-                    break;
-                }else if(!s2.isEmpty() && s2.peek() < M){
-                    s1.push(s2.pop());
-                    sb.append("+\n");
                 }
             }
         }
