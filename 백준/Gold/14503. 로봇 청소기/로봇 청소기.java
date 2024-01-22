@@ -74,9 +74,11 @@ public class Main {
                 }
                 ndy = y + dfy[dir];
                 ndx = x + dfx[dir];
+                if(ndx >= 0 && ndy >= 0 && ndx < M && ndy < N){
                     if(map[ndy][ndx] == 0){
                         break;
                     }
+                }
             }
             // 청소 진행
             clean(ndy, ndx, dir);
@@ -100,7 +102,9 @@ public class Main {
             dir = (dir + 1) % 4;
             int ndx = x + dfx[dir];
             int ndy = y + dfy[dir];
+            if(ndx >= 0 && ndy >= 0 && ndx < M && ndy < N){
                 if(map[ndy][ndx] == 0) count++;
+            }
         }
         if(count == 0) return false;
         return true;
@@ -110,7 +114,11 @@ public class Main {
     public static boolean back(int y, int x, int dir) {
         y = y + dby[dir];
         x = x + dbx[dir];
+        if (x >= 0 && y >= 0 && x < M && y < N) {
             if (map[y][x] != 1) return true;
             else return false;
+        }else{
+            return false;
+        }
     }
 }
