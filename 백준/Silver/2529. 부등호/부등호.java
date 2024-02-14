@@ -19,7 +19,7 @@ public class Main {
         list = new String[N];
         list = bf.readLine().split(" ");
         boolean[] visited = new boolean[10];
-        List<Integer> numbers = new LinkedList<>();
+        List<Integer> numbers = new ArrayList<>();
 
         for(int i=0; i<10; i++){
             numbers.add(i);
