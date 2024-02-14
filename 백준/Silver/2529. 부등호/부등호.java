@@ -11,6 +11,7 @@ public class Main {
     static Long min = Long.MAX_VALUE;
     static String str_min = "";
     static String str_max = "";
+    static int[] numbers;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -19,25 +20,24 @@ public class Main {
         list = new String[N];
         list = bf.readLine().split(" ");
         boolean[] visited = new boolean[10];
-        List<Integer> numbers = new ArrayList<>();
+        numbers = new int[N + 1];
 
         for(int i=0; i<10; i++){
-            numbers.add(i);
+            numbers[0] = i;
             visited[i] = true;
-            dfs(0, visited, numbers);
+            dfs(0, visited);
             visited[i] = false;
-            numbers.remove(0);
         }
         System.out.println(str_max);
         System.out.println(str_min);
     }
 
-    public static void dfs(int depth, boolean[] visited, List<Integer> numbers){
+    public static void dfs(int depth, boolean[] visited){
         // 종료 조건
         if(depth == N){
             String temp = "";
-            for(int i=0; i<numbers.size(); i++){
-                temp += String.valueOf(numbers.get(i));
+            for(int i=0; i<numbers.length; i++){
+                temp += String.valueOf(numbers[i]);
             }
 
             Long temp_long = Long.valueOf(temp);
@@ -54,20 +54,18 @@ public class Main {
         for(int i=0; i<10; i++){
             if(visited[i]) continue;
             if(list[depth].equals("<")){
-                if(numbers.get(depth) < i){
+                if(numbers[depth] < i){
                     visited[i] = true;
-                    numbers.add(i);
-                    dfs(depth + 1, visited, numbers);
+                    numbers[depth + 1] = i;
+                    dfs(depth + 1, visited);
                     visited[i] = false;
-                    numbers.remove(depth + 1);
                 }
             }else if(list[depth].equals(">")){
-                if(numbers.get(depth) > i){
+                if(numbers[depth] > i){
                     visited[i] = true;
-                    numbers.add(i);
-                    dfs(depth + 1, visited, numbers);
+                    numbers[depth + 1] = i;
+                    dfs(depth + 1, visited);
                     visited[i] = false;
-                    numbers.remove(depth + 1);
                 }
             }
         }
