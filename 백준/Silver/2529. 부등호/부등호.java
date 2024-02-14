@@ -35,18 +35,18 @@ public class Main {
     public static void dfs(int depth, boolean[] visited){
         // 종료 조건
         if(depth == N){
-            String temp = "";
+            StringBuilder temp = new StringBuilder();
             for(int i=0; i<numbers.length; i++){
-                temp += String.valueOf(numbers[i]);
+                temp.append(numbers[i]);
             }
 
-            Long temp_long = Long.valueOf(temp);
+            Long temp_long = Long.valueOf(temp.toString());
             if(temp_long < min){
                 min = temp_long;
-                str_min = temp;
+                str_min = temp.toString();
             }else if(temp_long > max){
                 max = temp_long;
-                str_max = temp;
+                str_max = temp.toString();
             }
             return;
         }
