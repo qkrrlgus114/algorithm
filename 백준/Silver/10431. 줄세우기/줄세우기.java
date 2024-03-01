@@ -14,21 +14,12 @@ public class Main {
 
         for(int t=0; t<T; t++){
             String[] inputs = br.readLine().split(" ");
-            List<Integer> list = new LinkedList<>();
-            list.add(Integer.parseInt(inputs[1]));
             int count = 0;
 
-            // 돌면서 키 비교
-            for(int i=2; i<inputs.length; i++){
-                // 현재 투입할 아이의 키
-                int target = Integer.parseInt(inputs[i]);
-                for(int j=0; j<list.size(); j++){
-                    if(list.get(j) < target && j == list.size() - 1){
-                        list.add(target);
-                    }else if(list.get(j) > target) {
-                        list.add(j, target);
-                        count += list.size() - j - 1;
-                        break;
+            for(int i=1; i<inputs.length; i++){
+                for(int j=1; j < i; j++){
+                    if(Integer.parseInt(inputs[j]) > Integer.parseInt(inputs[i])){
+                        count++;
                     }
                 }
             }
