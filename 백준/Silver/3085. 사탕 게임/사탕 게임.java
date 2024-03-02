@@ -7,21 +7,18 @@ public class Main {
     static int N;
     static int max = Integer.MIN_VALUE;
     static char[][] graph;
-    static char[][] ori_graph;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String s = bf.readLine();
         N = Integer.parseInt(s);
         graph = new char[N][N];
-        ori_graph = new char[N][N];
 
 
         for(int i=0; i<N; i++){
             s = bf.readLine();
             for(int j=0; j<N; j++){
                 graph[i][j] = s.charAt(j);
-                ori_graph[i][j] = graph[i][j];
             }
         }
 
@@ -29,8 +26,11 @@ public class Main {
         // 가로 위치가 다르면 사탕 바꿈
         for(int i=0; i<N; i++){
             for(int j=0; j<N-1; j++){
-                if(graph[i][j] != graph[i][j+1]) changeCnady(i, j, i, j+1, graph);
-                backUp(ori_graph);
+                if(graph[i][j] != graph[i][j+1]){
+                    swapCandy(i, j, i, j+1);
+                    changeCnady(i, j, i, j+1);
+                    swapCandy(i, j, i, j+1);
+                }
             }
         }
 
@@ -38,8 +38,11 @@ public class Main {
         // 가로 위치가 다르면 사탕 바꿈
         for(int j=0; j<N; j++){
             for(int i=0; i<N-1; i++){
-                if(graph[i][j] != graph[i+1][j]) changeCnady(i, j, i+1, j, graph);
-                backUp(ori_graph);
+                if(graph[i][j] != graph[i+1][j]) {
+                    swapCandy(i, j, i+1, j);
+                    changeCnady(i, j, i+1, j);
+                    swapCandy(i, j, i+1, j);
+                }
             }
         }
 
@@ -49,12 +52,7 @@ public class Main {
     }
 
     // 바꾸고 계산하는 메서드
-    public static void changeCnady(int y1, int x1, int y2, int x2, char[][] graph){
-        // 서로 자리를 바꿈
-        char temp = graph[y1][x1];
-        graph[y1][x1] = graph[y2][x2];
-        graph[y2][x2] = temp;
-
+    public static void changeCnady(int y1, int x1, int y2, int x2){
         // 가로 확인
         for(int i=0; i<N; i++){
             int count = 1;
@@ -88,6 +86,12 @@ public class Main {
                 graph[i][j] = back[i][j];
             }
         }
+    }
+
+    public static void swapCandy(int y1, int x1, int y2, int x2){
+        char temp = graph[y1][x1];
+        graph[y1][x1] = graph[y2][x2];
+        graph[y2][x2] = temp;
     }
 
 }
