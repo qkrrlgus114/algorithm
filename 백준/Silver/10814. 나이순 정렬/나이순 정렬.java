@@ -3,48 +3,62 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-class Person{
-    int age;
-    String name;
-    int seq;
+class Human implements Comparable<Human>{
+    private int age;
+    private String name;
+    private int index;
 
-    public Person(int age, String name, int seq) {
+    public Human(int age, String name, int index){
         this.age = age;
         this.name = name;
-        this.seq = seq;
+        this.index = index;
+    }
+
+    public int compareTo(Human h){
+        if(age == h.age) {
+            return index - h.index;
+        }
+        return age - h.age;
+    }
+
+    public int getAge(){
+        return this.age;
+    }
+
+    public String getName(){
+        return this.name;
     }
 }
 
 public class Main {
 
+    /*
+    * 1. 나이 오름차순
+    * 2. 가입한 순서
+    * */
+
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        String n = bf.readLine();
-        int N = Integer.parseInt(n);
+        String s = bf.readLine();
+        int N = Integer.parseInt(s);
 
-        List<Person> personList = new ArrayList<>();
+        List<Human> list = new ArrayList<>();
 
-        int seq = 1;
-        for(int k=0; k<N; k++){
-            String[] sa = bf.readLine().split(" ");
-            Person person = new Person(Integer.parseInt(sa[0]), sa[1], seq++);
-            personList.add(person);
-        }
-
-        Collections.sort(personList, new Comparator<Person>() {
-            @Override
-            public int compare(Person o1, Person o2) {
-                return Integer.compare(o1.age, o2.age);
-            }
-        });
+        int index = 0;
 
         for(int i=0; i<N; i++){
-            sb.append(personList.get(i).age + " " + personList.get(i).name + "\n");
+            String[] sa = bf.readLine().split(" ");
+            list.add(new Human(Integer.parseInt(sa[0]), sa[1], index++));
         }
 
-        System.out.println(sb.toString());
+        Collections.sort(list);
 
+        StringBuilder sb = new StringBuilder();
+        for(Human h : list){
+            sb.append(h.getAge()).append(" ").append(h.getName()).append("\n");
+        }
+
+        System.out.println(sb);
 
     }
 }
