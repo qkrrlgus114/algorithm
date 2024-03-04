@@ -10,7 +10,7 @@ public class Main {
         String s = bf.readLine();
 
         int N = Integer.parseInt(s);
-        Set<String> set = new TreeSet<>();
+        Set<String> set = new TreeSet<>(Collections.reverseOrder());
 
         for(int i=0; i<N; i++){
             String[] sa = bf.readLine().split(" ");
@@ -18,17 +18,17 @@ public class Main {
             else set.remove(sa[0]);
         }
 
-        List<String> list = new ArrayList<>(set);
+//        List<String> list = new ArrayList<>(set);
 
-        Collections.sort(list, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o2.compareTo(o1);
-            }
-        });
+//        Collections.sort(list, new Comparator<String>() {
+//            @Override
+//            public int compare(String o1, String o2) {
+//                return o2.compareTo(o1);
+//            }
+//        });
 
         StringBuilder sb = new StringBuilder();
-        for(String name : list){
+        for(String name : set){
             sb.append(name).append("\n");
         }
 
