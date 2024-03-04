@@ -11,28 +11,31 @@ public class Main {
         String s = bf.readLine();
         int N = Integer.parseInt(s);
 
-        List<String> list = new ArrayList<>();
+        Map<String, Integer> map = new HashMap<>();
         for(int i=0; i<N; i++){
             s = bf.readLine();
-            list.add(s);
+            if(map.containsKey(s)){
+                int temp = map.get(s);
+                map.put(s, temp + 1);
+            }else{
+                map.put(s, 1);
+            }
         }
 
-        Collections.sort(list);
+        int max_count = 0;
+        String result = "";
 
-        int max_count = Integer.MIN_VALUE;
-        int cur_count = 1;
-        String result = list.get(0);
-        for(int i=1; i<N; i++){
-            if(!list.get(i).equals(list.get(i-1))) cur_count = 0;
-            cur_count++;
-
-            if(max_count < cur_count && list.get(i).equals(list.get(i-1))){
-                max_count = cur_count;
-                result = list.get(i);
+        for(Map.Entry<String, Integer> m : map.entrySet()){
+            int value = m.getValue();
+            String title = m.getKey();
+            if(value > max_count){
+                max_count = value;
+                result = title;
+            }else if(value == max_count && result.compareTo(title) > 0){
+                result = title;
             }
         }
 
         System.out.println(result);
-
     }
 }
