@@ -10,7 +10,7 @@ public class Main {
         String s = bf.readLine();
 
         int N = Integer.parseInt(s);
-        HashSet<String> set = new HashSet<>();
+        Set<String> set = new TreeSet<>();
 
         for(int i=0; i<N; i++){
             String[] sa = bf.readLine().split(" ");
