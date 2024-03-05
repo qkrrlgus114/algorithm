@@ -3,35 +3,54 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+class Cop{
+    private int start;
+    private int end;
+
+    public Cop(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    public int getStart(){
+        return this.start;
+    }
+
+    public int getEnd(){
+        return this.end;
+    }
+}
+
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        String[] sa = bf.readLine().split(" ");
+        int N = Integer.parseInt(sa[0]);
+        int M = Integer.parseInt(sa[1]);
+        StringBuilder sb = new StringBuilder();
 
-        String[] s = bf.readLine().split(" ");
-        int M = Integer.parseInt(s[1]);
+        int[] arr = new int[N];
+        int[] sum = new int[N+1];
 
-        s = bf.readLine().split(" ");
-        // 합배열
-        int[] S = new int[s.length + 1];
-        S[0] = 0;
-
-        // 합배열 계산
-        for(int i=1; i<S.length; i++){
-            S[i] = Integer.parseInt(s[i-1]) + S[i-1];
+        sa = bf.readLine().split(" ");
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(sa[i]);
         }
 
-        for(int k=0; k<M; k++){
-            s = bf.readLine().split(" ");
-            int a = Integer.parseInt(s[0]);
-            int b = Integer.parseInt(s[1]);
-
-            if(a == 0){
-                System.out.println(S[b]);
-            }else{
-                System.out.println(S[b] - S[a - 1]);
-            }
+        // 누적합 구하기
+        for(int i=1; i<N+1; i++){
+            sum[i] = sum[i-1] + arr[i-1];
         }
 
+        for(int i=0; i<M; i++){
+            sa = bf.readLine().split(" ");
+            int start = Integer.parseInt(sa[0]);
+            int end = Integer.parseInt(sa[1]);
+            int result = sum[end] - sum[start - 1];
+            sb.append(result).append("\n");
+        }
+
+        System.out.println(sb);
     }
 }
