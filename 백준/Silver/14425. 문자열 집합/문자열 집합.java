@@ -2,10 +2,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
+
+    static String[] name;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -14,29 +14,45 @@ public class Main {
         int N = Integer.parseInt(sa[0]);
         int M = Integer.parseInt(sa[1]);
 
-        Map<String, Integer> map = new HashMap<>();
-        String[] name = new String[N];
-
+        name = new String[N];
         for(int i=0; i<N; i++){
             String s = bf.readLine();
             name[i] = s;
-            map.put(s, 0);
         }
+        Arrays.sort(name);
+
+        int count = 0;
 
         for(int i=0; i<M; i++){
             String s = bf.readLine();
-            if(map.containsKey(s)){
-                map.put(s, map.get(s) + 1);
-            }
+            boolean result = binarySearch(0, N - 1, s);
+            count += result ? 1 : 0;
+        }
+        System.out.println(count);
+    }
+
+    public static boolean binarySearch(int low, int high, String target){
+        if(low > high){
+            return false;
         }
 
-        int result = 0;
+        int mid = (low + high) / 2;
 
-        for(int i=0; i<N; i++){
-            result += map.get(name[i]);
+        // 뒤에 있다는 뜻
+        if(name[mid].compareTo(target) < 0){
+            return binarySearch(mid + 1, high, target);
         }
 
-        System.out.println(result);
+        // 앞에 있다는 뜻
+        if(name[mid].compareTo(target) > 0){
+            return binarySearch(low, mid - 1, target);
+        }
 
+        // 일치함
+        if(name[mid].compareTo(target) == 0){
+            return true;
+        }
+
+        return false;
     }
 }
