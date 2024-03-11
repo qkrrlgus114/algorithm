@@ -28,33 +28,31 @@ public class Main {
 
         Arrays.sort(arr);
 
-        for(int i=0; i<N-1; i++){
-            binarySearch(i+1, N-1, arr[i]);
+        int l = 0;
+        int r = N-1;
+        while(true){
+            if(l >= r) break;
+            int sum = arr[l] + arr[r];
+            // 0에 가까운 값 갱신
+            if(Math.abs(sum) < value){
+                value = Math.abs(sum);
+                result_one = arr[l];
+                result_two = arr[r];
+                if(Math.abs(sum) == 0) break;
+            }
+
+            // 음수이면
+            if(sum < 0){
+                l++;
+            }
+            // 양수이면
+            else if(sum > 0){
+                r--;
+            }
         }
 
         System.out.println(Math.min(result_one, result_two) + " " + Math.max(result_one, result_two));
 
-
     }
 
-    public static void binarySearch(int low, int high, int target){
-        if(low > high) return;
-
-        int mid = (low + high) / 2;
-
-        int temp = Math.abs(arr[mid] + target);
-
-        if(temp < value){
-            value = temp;
-            result_one = target;
-            result_two = arr[mid];
-        }
-
-        if(target + arr[mid] < 0){
-            binarySearch(mid + 1, high, target);
-        }else if(target + arr[mid] > 0){
-            binarySearch(low, mid - 1, target);
-        }
-
-    }
 }
