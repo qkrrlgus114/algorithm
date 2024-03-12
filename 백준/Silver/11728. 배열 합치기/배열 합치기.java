@@ -11,23 +11,44 @@ public class Main {
         int N = Integer.parseInt(sa[0]);
         int M = Integer.parseInt(sa[1]);
 
-        Integer[] arr = new Integer[N+M];
+        int[] arr_n = new int[N];
+        int[] arr_m = new int[M];
+
 
         sa = bf.readLine().split(" ");
         for(int i=0; i<N; i++){
-            arr[i] = Integer.parseInt(sa[i]);
+            arr_n[i] = Integer.parseInt(sa[i]);
         }
         sa = bf.readLine().split(" ");
-        for(int i=N; i<N+M; i++){
-            arr[i] = Integer.parseInt(sa[i-N]);
+        for(int i=0; i<M; i++){
+            arr_m[i] = Integer.parseInt(sa[i]);
         }
-
-        Arrays.sort(arr);
 
         StringBuilder sb = new StringBuilder();
-        for(Integer i : arr){
-            sb.append(i).append(" ");
-        }
+
+        int l = 0;
+        int r = 0;
+         while(true){
+             if(l >= N && r >= M) break;
+
+             if(l >= N){
+                 sb.append(arr_m[r]).append(" ");
+                 r++;
+             }else if(r >= M){
+                 sb.append(arr_n[l]).append(" ");
+                 l++;
+             }else{
+                 int n = arr_n[l];
+                 int m = arr_m[r];
+                 if(n > m){
+                     sb.append(m).append(" ");
+                     r++;
+                 }else{
+                     sb.append(n).append(" ");
+                     l++;
+                 }
+             }
+         }
 
         System.out.println(sb);
 
