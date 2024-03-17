@@ -1,50 +1,51 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
+
+    static int N, M;
+    static List<Integer> pick;
     static int[] arr;
-    static int[] result;
-    static boolean[] visited;
-    static int N;
-    static int M;
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String[] s = bf.readLine().split(" ");
-        N = Integer.parseInt(s[0]);
-        M = Integer.parseInt(s[1]);
 
+        String[] sa = bf. readLine().split(" ");
+        N = Integer.parseInt(sa[0]);
+        M = Integer.parseInt(sa[1]);
+        pick = new ArrayList<>();
         arr = new int[N];
-        result = new int[M];
-        visited = new boolean[N];
-        s = bf.readLine().split(" ");
-        for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(s[i]);
+
+        sa = bf.readLine().split(" ");
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(sa[i]);
         }
+
         Arrays.sort(arr);
-        back(0, 0);
-        System.out.println(sb.toString());
+
+        combination(0);
+        System.out.println(sb);
+
     }
 
-    public static void back(int depth, int count) {
-        if (count == M) {
-            for (Integer i : result) {
-                sb.append(i + " ");
+    public static void combination(int num){
+        // 종료 조건
+        if(num == M){
+            for(int i : pick){
+                sb.append(i).append(" ");
             }
             sb.append("\n");
             return;
         }
 
-        for (int i = 0; i < N; i++) {
-//            if(!visited[i]){
-//                visited[i] = true;
-                result[count] = arr[i];
-                back(i, count + 1);
-//                visited[i] = false;
-            }
+        for(int i=0; i<N; i++){
+            pick.add(arr[i]);
+            combination(num + 1);
+            pick.remove(pick.size() - 1);
         }
     }
+}
