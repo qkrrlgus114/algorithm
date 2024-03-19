@@ -1,62 +1,70 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Map;
-
 
 public class Main {
 
-    static boolean[][] visited;
     static int N;
-    static int count = 0;
+    static int[][] chess_board;
+    static int result = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String n = bf.readLine();
-        N = Integer.parseInt(n);
-        visited = new boolean[N][N];
+        String s = bf.readLine();
+        N = Integer.parseInt(s);
 
-        back(0);
+        chess_board = new int[N][N];
 
-        System.out.println(count);
+        dfs(0);
 
+        System.out.println(result);
     }
 
-    public static void back(int queen) {
-        if (queen == N) {
-            count++;
+    public static void dfs(int queen){
+        // 종료
+        if(queen == N){
+            result++;
             return;
         }
 
-        for (int j = 0; j < N; j++) {
-            if (check(queen, j)) {
-                visited[queen][j] = true;
-                back(queen + 1);
-                visited[queen][j] = false;
+        // 재귀
+        for(int i=0; i<N; i++){
+            if(chess_board[queen][i] == 0 && checkQueen(queen, i)){
+                chess_board[queen][i] = 1;
+                dfs(queen + 1);
+                chess_board[queen][i] = 0;
             }
         }
+
     }
 
-    public static boolean check(int y, int x) {
-        for (int i = 0; i < y; i++) {
-            // 위
-            if(visited[i][x]){
-                return false;
-            }
+    public static boolean checkQueen(int y, int x){
+        // 위, 왼쪽위, 오른쪽위 확인
+        int i = y;
+        int j = x;
+        // 1. 위 확인
+        while(i >= 0){
+            if(chess_board[i][j] != 0) return false;
+            i--;
+        }
 
-            // 왼쪽 대각선
-            int temp = x - (y - i);
-            if(temp >= 0 && visited[i][temp]){
-                return false;
-            }
+        i = y;
+        j = x;
+        // 2. 왼쪽 위 확인
+        while(i >= 0 && j >= 0){
+            if(chess_board[i][j] != 0) return false;
+            i--;
+            j--;
+        }
 
-            // 오른쪽 대각선
-            temp = x + (y - i);
-            if(temp < N && visited[i][temp]){
-                return false;
-            }
+        i = y;
+        j = x;
+        // 3. 오른쪽 위 확인
+        while(i >= 0 && j < N){
+            if(chess_board[i][j] != 0) return false;
+            i--;
+            j++;
         }
         return true;
     }
