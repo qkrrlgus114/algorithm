@@ -4,12 +4,14 @@
 import java.util.*;
 
 class Solution {
-    
-    static int result = 0;
+
+    static Stack<Character> stack = new Stack<>();
     
     public int solution(String s) {
+        int result = 0;
 
         for(int i=0; i<s.length(); i++){
+            stack.clear();
             if(check(s.substring(i) + s.substring(0, i))) result++;
         }
         
@@ -17,8 +19,6 @@ class Solution {
     }
 
     public static boolean check(String s){
-        Stack<Character> stack = new Stack<>();
-        
         for(int i=0; i<s.length(); i++){
             char cur = s.charAt(i);
             if(cur == '(' || cur == '[' || cur == '{') stack.push(cur);
