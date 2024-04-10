@@ -16,7 +16,7 @@ class Solution {
         // 왼쪽 조각
         piece1[topping[0]]++;
         count1++;
-        // 오른쪽 조각
+        // 오른쪽 조각 
         for(int i=1; i<topping.length; i++){
             piece2[topping[i]]++;
             if(piece2[topping[i]] == 1) count2++;
