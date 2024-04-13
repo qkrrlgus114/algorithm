@@ -1,43 +1,28 @@
 import java.util.*;
 
 class Solution {
-    static boolean[] visited;
+    
+    static int[] memo = new int[1000001];
     
     public int solution(int x, int y, int n) {
-        visited = new boolean[y+1];
+        Arrays.fill(memo, Integer.MAX_VALUE);
+        memo[x] = 0;
         
-        if(x == y) return 0;
-        else return bfs(x, y, n);
-    }
-    
-    public static int bfs(int x, int y, int n){
-        Queue<int[]> q = new LinkedList<>();
-        visited[x] = true;
-        q.add(new int[]{x, 0});
-        
-        while(!q.isEmpty()){
-            int[] temp = q.poll();
-            x = temp[0];
-            int count = temp[1];
+        for(int i=x; i<=y; i++){
+            if(memo[i] == Integer.MAX_VALUE) continue;
             
-            // x+n 확인
-            if(x + n <= y && !visited[x + n]){
-                if(x + n == y) return count + 1;
-                visited[x + n] = true;
-                q.add(new int[]{x + n, count + 1});
+            if(i + n <= y){
+                memo[i + n] = Math.min(memo[i + n], memo[i] + 1);
             }
-            if(x * 2 <= y && !visited[x * 2]){
-                if(x * 2 == y) return count + 1;
-                visited[x * 2] = true;
-                q.add(new int[]{x * 2, count + 1});
+            if(i * 2 <= y){
+                memo[i * 2] = Math.min(memo[i * 2], memo[i] + 1);
             }
-            if(x * 3 <= y && !visited[x * 3]){
-                if(x * 3 == y) return count + 1;
-                visited[x * 3] = true;
-                q.add(new int[]{x * 3, count + 1});
+            if(i * 3 <= y){
+                memo[i * 3] = Math.min(memo[i * 3], memo[i] + 1);
             }
         }
         
-        return -1;
+        return memo[y] == Integer.MAX_VALUE ? -1 : memo[y];
+        
     }
 }
