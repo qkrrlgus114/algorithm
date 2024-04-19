@@ -1,57 +1,61 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.util.Arrays;
+import java.util.*;
 
 public class Main {
-    static int[] A;
-    static int[] B;
+
+    static int[] targetArr;
+    static int[] searchArr;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-
         String s = bf.readLine();
         int N = Integer.parseInt(s);
-        String[] list = bf.readLine().split(" ");
-        A = new int[list.length];
-        for (int i = 0; i < A.length; i++) {
-            A[i] = Integer.parseInt(list[i]);
+        String[] sa = bf.readLine().split(" ");
+        targetArr = new int[N];
+        for(int i=0; i<N; i++){
+            targetArr[i] = Integer.parseInt(sa[i]);
         }
-
         s = bf.readLine();
         int M = Integer.parseInt(s);
-        list = bf.readLine().split(" ");
-        B = new int[list.length];
-        for (int i = 0; i < B.length; i++) {
-            B[i] = Integer.parseInt(list[i]);
+        sa = bf.readLine().split(" ");
+        searchArr = new int[M];
+        for(int i=0; i<M; i++){
+            searchArr[i] = Integer.parseInt(sa[i]);
         }
 
-        Arrays.sort(A);
 
-        for (int i = 0; i < B.length; i++) {
-            int result = binarySearch(0, A.length - 1, B[i]);
-            System.out.println(result);
+        // 이분 탐색 진행
+        Arrays.sort(targetArr);
+
+        List<Integer> result = new ArrayList<>();
+
+        for(int i=0; i<M; i++){
+            boolean value = binarySearch(0, N-1, searchArr[i]);
+            if(value) result.add(1);
+            else result.add(0);
         }
+
+        for(Integer i : result){
+            System.out.println(i);
+        }
+
     }
 
-    public static int binarySearch(int start, int end, int target) {
+    public static boolean binarySearch(int start, int end, int target){
+        if(start > end){
+            return false;
+        }
 
         int mid = (start + end) / 2;
+        int value = targetArr[mid];
 
-        if (start <= end) {
-            if (A[mid] == target) {
-                return 1;
-            }
-
-            if (target < A[mid]) {
-                return binarySearch(start, mid - 1, target);
-            }
-
-            if (target > A[mid]) {
-                return binarySearch(mid + 1, end, target);
-            }
+        if(target == value) return true;
+        else if(target > value){
+            return binarySearch(mid + 1, end, target);
+        }else{
+            return binarySearch(start, mid - 1, target);
         }
-        return 0;
     }
 }
