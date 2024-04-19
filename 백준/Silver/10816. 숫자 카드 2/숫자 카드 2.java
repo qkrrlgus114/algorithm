@@ -1,47 +1,44 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 public class Main {
-
-    static int N;
-    static int M;
-
-
+    static int N, M;
+    static int[] takeCard;
+    static int[] searchCard;
 
     public static void main(String[] args) throws IOException {
-        StringBuilder sb = new StringBuilder();
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String n = bf.readLine();
-        N = Integer.parseInt(n);
+        String s = bf.readLine();
         String[] sa = bf.readLine().split(" ");
-        HashMap<Long, Long> map = new HashMap<>();
+        N = Integer.parseInt(s);
+        takeCard = new int[N];
         for(int i=0; i<N; i++){
-            Long temp = Long.parseLong(sa[i]);
-            if(map.containsKey(temp)){
-                map.put(temp, map.get(temp) + 1);
-            }else{
-                map.put(temp, 1L);
-            }
+            takeCard[i] = Integer.parseInt(sa[i]);
         }
-        String m = bf.readLine();
-        M = Integer.parseInt(m);
 
+        s = bf.readLine();
         sa = bf.readLine().split(" ");
+        M = Integer.parseInt(s);
+        searchCard = new int[M];
         for(int i=0; i<M; i++){
-            Long temp = Long.parseLong(sa[i]);
-            if(map.containsKey(temp)){
-                sb.append(map.get(temp) + " ");
-            }else{
-                sb.append(0 + " ");
-            }
+            searchCard[i] = Integer.parseInt(sa[i]);
         }
 
-        System.out.println(sb.toString());
+        int[] countArr = new int[20000002];
+        for(int i=0; i<N; i++){
+            countArr[10000000 + takeCard[i]]++;
+        }
+        int[] result = new int[M];
+        for(int i=0; i<M; i++){
+            result[i] = countArr[10000000 + searchCard[i]];
+        }
 
-
-
+        StringBuilder sb = new StringBuilder();
+        for(int i : result){
+            sb.append(i).append(" ");
+        }
+        System.out.println(sb);
     }
 }
