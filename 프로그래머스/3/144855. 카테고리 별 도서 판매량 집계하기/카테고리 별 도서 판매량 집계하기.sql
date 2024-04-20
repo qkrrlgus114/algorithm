@@ -1,7 +1,10 @@
-SELECT A.CATEGORY, SUM(B.SALES) AS TOTAL_SALES
-FROM BOOK AS A
-JOIN BOOK_SALES AS B
-ON A.BOOK_ID = B.BOOK_ID
-WHERE B.SALES_DATE LIKE '2022-01%'
-GROUP BY A.CATEGORY 
-ORDER BY A.CATEGORY 
+# 2022년 1월 카테고리별 도서 판매량 합산
+# 카테고리명 기준 오름차순
+
+select b.category, sum(bs.sales) as TOTAL_SALES
+from book as b
+inner join book_sales as bs
+on b.book_id = bs.book_id
+where bs.sales_date like '2022-01%'
+group by b.category
+order by b.category asc
