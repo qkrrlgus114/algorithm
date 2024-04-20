@@ -1,7 +1,10 @@
--- 코드를 입력하세요
-SELECT DISTINCT(A.CAR_ID) AS CAR_ID
-FROM CAR_RENTAL_COMPANY_CAR AS A
-INNER JOIN CAR_RENTAL_COMPANY_RENTAL_HISTORY AS B
-ON A.CAR_ID = B.CAR_ID
-WHERE A.CAR_TYPE = '세단' AND B.START_DATE >= '2022-10-01'
-ORDER BY A.CAR_ID DESC
+# 자동차 종류 '세단'
+# 10월 대여 시작 기록
+# 자동차 id 리스트는 중복 없음, id 내림차순
+
+select distinct(c.car_id)
+from CAR_RENTAL_COMPANY_CAR as c
+inner join CAR_RENTAL_COMPANY_RENTAL_HISTORY as h
+on c.car_id = h.car_id
+where c.car_type = '세단' and h.start_date like '2022-10%'
+order by c.car_id desc
