@@ -14,31 +14,20 @@ public class Main {
         int n = Integer.parseInt(sa[2]); // 양+염소
         int w = Integer.parseInt(sa[3]); // 소비한 사료
 
-        int sheep = n-1;
-        int cow = 1;
-        boolean check = false;
-        int result1 = -1;
-        int result2 = -1;
+        int sheep = 0;
 
-        while(cow < n){
-            int eatA = a * sheep;
-            int eatB = b * cow;
-
-            if(eatA + eatB == w && !check){
-                result1 = sheep;
-                result2 = cow;
-                check = true;
-            }else if(eatA + eatB == w && check){
-                result1 = -1;
-                result2 = -1;
-                break;
+        for(int i=1; i<=n-1; i++){
+            if(i * a + (n-i) * b == w){
+                if(sheep == 0){
+                    sheep = i;
+                }else{
+                    System.out.println(-1);
+                    return;
+                }
             }
-
-            sheep--;
-            cow++;
         }
-        if(result1 != -1) System.out.println(result1 + " " + result2);
-        else System.out.println(-1);
 
+        if(sheep == 0) System.out.println(-1);
+        else System.out.println(sheep + " " + (n - sheep));
     }
 }
