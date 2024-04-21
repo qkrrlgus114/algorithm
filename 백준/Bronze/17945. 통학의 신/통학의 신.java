@@ -11,15 +11,9 @@ public class Main {
 
         int A = Integer.parseInt(sa[0]);
         int B = Integer.parseInt(sa[1]);
-
-        int root = (int) Math.sqrt(A * A - B);
-        int num1 = -A - root;
-        int num2 = -A + root;
-
-        if(num1 == num2){
-            System.out.println(num1);
-        }else{
-            System.out.println(Math.min(num1, num2) + " " + Math.max(num1, num2));
+        
+        for(int i=-1000; i<=1000; i++){
+            if(i * i + 2 * A * i + B == 0) System.out.print(i + " ");
         }
 
     }
