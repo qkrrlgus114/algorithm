@@ -15,54 +15,49 @@ public class Main {
         int N = Integer.parseInt(s);
         String[] sa = bf.readLine().split(" ");
         int[] arr = new int[N];
-        int[] prefixSum = new int[N+1];
         for(int i=0; i<N; i++){
             arr[i] = Integer.parseInt(sa[i]);
         }
 
-        int e = Integer.MAX_VALUE;
-        int steak = 0;
+        int answer = 0;
+        int minValue = Integer.MAX_VALUE;
 
-        for (int mid = 1; mid < N; mid++) {
-            int leftSum = arr[mid - 1];
-            int rightSum = arr[mid];
-            int left = mid - 1;
-            int right = mid;
+        for(int i=1; i<N; i++){
+            int leftSum = arr[i-1];
+            int rightSum = arr[i];
+            int l = i-1;
+            int r = i;
 
-            while (true) {
-                int diff = Math.abs(leftSum - rightSum);
-                if (diff == e) {
-                    steak = Math.max(steak, leftSum + rightSum);
-                } else if (diff < e) {
-                    e = diff;
-                    steak = leftSum + rightSum;
+            while(true){
+                int temp = Math.abs(rightSum - leftSum);
+
+                if(temp == minValue){
+                    answer = Math.max(answer, leftSum + rightSum);
+                }else if(minValue > temp){
+                    minValue = temp;
+                    answer = leftSum + rightSum;
                 }
 
-                if (leftSum < rightSum) {
-                    if (left == 0) {
-                        break;
-                    }
-                    left--;
-                    leftSum += arr[left];
-                } else if (leftSum > rightSum) {
-                    if (right == N - 1) {
-                        break;
-                    }
-                    right++;
-                    rightSum += arr[right];
-                } else {
-                    if (left == 0 || right == N - 1) {
-                        break;
-                    }
-                    left--;
-                    right++;
-                    leftSum += arr[left];
-                    rightSum += arr[right];
+                if(leftSum > rightSum){
+                    if(r == N-1) break;
+                    r++;
+                    rightSum += arr[r];
+                }else if(leftSum < rightSum){
+                    if(l == 0) break;
+                    l--;
+                    leftSum += arr[l];
+                }else{
+                    if(l == 0 || r == N-1) break;
+                    r++;
+                    l--;
+                    rightSum += arr[r];
+                    leftSum += arr[l];
                 }
             }
         }
 
-        System.out.println(steak);
+        System.out.println(answer);
+
     }
 }
 
