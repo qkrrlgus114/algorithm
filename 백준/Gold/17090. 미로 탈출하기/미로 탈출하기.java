@@ -13,15 +13,15 @@ public class Main {
     static int N, M;
     static char[][] graph;
     static boolean[][] visited;
-    static int[][] memo;
-    static int answer = 0;
-    static Queue<int[]> q = new LinkedList<>();
+    static boolean[][] memo;
+
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String[] sa = bf.readLine().split(" ");
         N = Integer.parseInt(sa[0]);
         M = Integer.parseInt(sa[1]);
+        int answer = 0;
 
         graph = new char[N][M];
         for(int i=0; i<N; i++){
@@ -30,69 +30,45 @@ public class Main {
         }
         
         visited = new boolean[N][M];
-        memo = new int[N][M];
+        memo = new boolean[N][M];
         
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
-                if(memo[i][j] == 0){
-                    boolean result = dfs(i, j);
-                    if(result) answer++;
-                }else if(memo[i][j] == 1){
-                    answer++;
-                }
+                if(visited[i][j]) continue;
+                dfs(i, j);
+            }
+        }
+
+        for(int i=0; i<N; i++){
+            for(int j=0; j<M; j++){
+                if(memo[i][j]) answer++;
             }
         }
 
         System.out.println(answer);
 
+
     }
 
     public static boolean dfs(int i, int j){
-        if(i < 0 || i >= N || j < 0 || j >= M){
-            qAdd(true);
-            return true;
-        }
-
-        // 메모 배열 확인
-        if(memo[i][j] == 2) {
-            qAdd(false);
-            return false;
-        }
-        else if(memo[i][j] == 1) {
-            qAdd(true);
+        if(i < 0 || j < 0 || i >= N || j >= M){
             return true;
         }
 
         if(visited[i][j]){
-            qAdd(false);
-            return false;
+            return memo[i][j];
         }
+
         visited[i][j] = true;
-        q.add(new int[]{i, j});
 
         char dir = graph[i][j];
 
-        if(dir == 'U') return dfs(i-1, j);
-        else if(dir == 'D') return dfs(i+1, j);
-        else if(dir == 'R') return dfs(i, j+1);
-        else if(dir == 'L') return dfs(i, j-1);
+        if(dir == 'U') memo[i][j] = dfs(i-1, j);
+        else if(dir == 'D') memo[i][j] = dfs(i+1, j);
+        else if(dir == 'R') memo[i][j] = dfs(i, j+1);
+        else if(dir == 'L') memo[i][j] = dfs(i, j-1);
 
-        return false;
-    }
-
-    public static void qAdd(boolean check){
-        // 1이면 탈출가능 경로, 2면 탈출 불가능 경로
-        if(check){
-            while(!q.isEmpty()){
-                int[] temp = q.poll();
-                memo[temp[0]][temp[1]] = 1;
-            }
-        }else{
-            while(!q.isEmpty()){
-                int[] temp = q.poll();
-                memo[temp[0]][temp[1]] = 2;
-            }
-        }
+        return memo[i][j];
     }
 
 }
