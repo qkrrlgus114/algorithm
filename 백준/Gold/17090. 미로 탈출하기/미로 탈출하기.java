@@ -35,7 +35,6 @@ public class Main {
         for(int i=0; i<N; i++){
             for(int j=0; j<M; j++){
                 if(memo[i][j] == 0){
-                    resetVisited();
                     boolean result = dfs(i, j);
                     if(result) answer++;
                 }else if(memo[i][j] == 1){
@@ -79,14 +78,6 @@ public class Main {
         else if(dir == 'L') return dfs(i, j-1);
 
         return false;
-    }
-
-    public static void resetVisited(){
-        for(int i=0; i<N; i++){
-            for(int j=0; j<M; j++){
-                visited[i][j] = false;
-            }
-        }
     }
 
     public static void qAdd(boolean check){
