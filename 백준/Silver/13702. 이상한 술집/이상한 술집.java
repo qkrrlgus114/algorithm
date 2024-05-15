@@ -18,29 +18,29 @@ public class Main {
 
         int[] arr = new int[N];
         int max = 0;
-        for(int i=0; i<N; i++){
+        for (int i = 0; i < N; i++) {
             String s = bf.readLine();
             arr[i] = Integer.parseInt(s);
             max = Math.max(max, arr[i]);
         }
 
-        long l = 1;
-        long r = max;
+        long l = 0;
+        long r = Integer.MAX_VALUE;
         long answer = 0;
 
-        while(l <= r){
+        while (l <= r) {
             long mid = (l + r) / 2;
             // 나눠줄 수 있는 인원의 수
             long count = 0;
 
-            for(int drink : arr){
+            for (int drink : arr) {
                 count += drink / mid;
             }
 
-            if(count >= K){
+            if (count >= K) {
                 answer = mid;
                 l = mid + 1;
-            }else{
+            } else {
                 r = mid - 1;
             }
         }
