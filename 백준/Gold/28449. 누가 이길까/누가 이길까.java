@@ -46,15 +46,15 @@ public class Main {
 
     public static int lowerBound(int[] b, int target){
         int l = 0;
-        int r = b.length;
+        int r = b.length - 1;
 
-        while(l < r){
+        while(l <= r){
             int mid = (l + r) / 2;
 
             if(b[mid] < target){
                 l = mid + 1;
             }else{
-                r = mid;
+                r = mid - 1;
             }
         }
         return l;
@@ -62,14 +62,14 @@ public class Main {
 
     public static int upperBound(int[] b, int target){
         int l = 0;
-        int r = b.length;
+        int r = b.length - 1;
 
-        while(l < r){
+        while(l <= r){
             int mid = (l + r) / 2;
             if(b[mid] <= target){
                 l = mid + 1;
             }else{
-                r = mid;
+                r = mid - 1;
             }
         }
         return l;
