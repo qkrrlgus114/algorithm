@@ -1,7 +1,10 @@
 import java.io.BufferedReader;
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Main {
@@ -34,45 +37,18 @@ public class Main {
             sb.setLength(0);
         }
 
-        Arrays.sort(str);
-        boolean check = true;
-
-        for(int i=1; i<R; i++){
+        outer: for(int i=1; i<R; i++){
+            Map<String, Integer> map = new HashMap<>();
             for(int j=0; j<C; j++){
-                str[j] = str[j].substring(1, str[j].length());
+                String word = str[j].substring(i, str[j].length());
+                if(map.containsKey(word)) break outer;
+                map.put(word, 1);
             }
-            Arrays.sort(str);
-
-            for(int j=0; j<C; j++){
-                String word = str[j];
-
-                if(j == 0){
-                    if(word.equals(str[j+1])){
-                        check = false;
-                        break;
-                    }
-                }else if(j == C - 1){
-                    if(word.equals(str[j-1])){
-                        check = false;
-                        break;
-                    }
-                }else if(j != 0 && j != C-1){
-                    if(word.equals(str[j+1])){
-                        check = false;
-                        break;
-                    }
-                    if(word.equals(str[j-1])){
-                        check = false;
-                        break;
-                    }
-                }
-            }
-
-            if(check) answer++;
-            else break;
+            answer++;
         }
 
         System.out.println(answer);
+
     }
 }
 
