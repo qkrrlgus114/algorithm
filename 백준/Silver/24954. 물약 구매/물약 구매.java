@@ -62,6 +62,9 @@ public class Main {
     }
 
     private static void permutation(int depth, int sum){
+        if(sum > answer){
+            return;
+        }
         // 종료 조건 (N개를 다 뽑으면 종료)
         if(depth == N){
             answer = Math.min(answer, sum);
