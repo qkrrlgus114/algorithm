@@ -22,7 +22,8 @@ public class Main {
         }
 
         dfs(0, 0);
-        System.out.println(answer);
+        
+        System.out.println(answer == Integer.MAX_VALUE ? -1 : answer);
 
     }
 
