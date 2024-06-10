@@ -6,31 +6,26 @@ import java.util.*;
 
 public class Main {
 
+    static int[] dp;
+
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(bf.readLine());
+        dp = new int[1001];
+        dp[1] = dp[3] = 1;
+        dp[2] = 2;
 
-        dfs(N, 0);
-    }
-
-    private static void dfs(int cur, int count){
-        if(cur < 0) return;
-
-        if(cur == 0){
-            if(count % 2 == 1){
-                System.out.println("SK");
-            }else{
-                System.out.println("CY");
-            }
-            System.exit(0);
+        for(int i=3; i<=N; i++){
+            dp[i] = Math.min(dp[i-1], dp[i-3]) + 1;
         }
 
-        // 재귀 조건
-        dfs(cur - 1, count + 1);
-        dfs(cur - 3, count + 1);
+        if(dp[N] % 2 == 1){
+            System.out.println("SK");
+        }else{
+            System.out.println("CY");
+        }
     }
-
 }
 
 
