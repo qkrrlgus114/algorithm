@@ -13,8 +13,7 @@ public class Main {
         int N = Integer.parseInt(bf.readLine());
 
         char[] commands = bf.readLine().toCharArray();
-
-        Stack<Character> s = new Stack<>();
+        
         int LCount = 0;
         int SCount = 0;
         int result = 0;
@@ -25,10 +24,8 @@ public class Main {
                 result++;
             }else{
                 if(command == 'L'){
-                    s.add(command);
                     LCount++;
                 }else if(command == 'S'){
-                    s.add(command);
                     SCount++;
                 }else if(command == 'R'){
                     if(LCount == 0) break;
