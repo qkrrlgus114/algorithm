@@ -1,10 +1,11 @@
-# 자동차 종류 '세단'
-# 10월 대여 시작 기록
-# 자동차 id 리스트는 중복 없음, id 내림차순
+# 세단인 자동차
+# 10월에 대여를 시작한 기록
+# 자동차 ID 출력, 중복 X
+# ID 내림차순
 
-select distinct(c.car_id)
-from CAR_RENTAL_COMPANY_CAR as c
-inner join CAR_RENTAL_COMPANY_RENTAL_HISTORY as h
-on c.car_id = h.car_id
-where c.car_type = '세단' and h.start_date like '2022-10%'
-order by c.car_id desc
+SELECT DISTINCT(C.CAR_ID)
+FROM CAR_RENTAL_COMPANY_CAR AS C
+INNER JOIN CAR_RENTAL_COMPANY_RENTAL_HISTORY AS CR
+ON C.CAR_ID = CR.CAR_ID
+WHERE C.CAR_TYPE = '세단' AND CR.START_DATE LIKE ('2022-10%')
+ORDER BY C.CAR_ID DESC
