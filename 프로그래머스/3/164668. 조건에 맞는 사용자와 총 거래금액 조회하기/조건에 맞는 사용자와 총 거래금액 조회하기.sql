@@ -1,13 +1,13 @@
-# 완료 된 거래
-# 총 금액 70만원 이상
-# 회원 id, 닉네임, 총거래금액
-# 총거래금액 기준 오름차순
+# 완료된 중고거래
+# 총 금액이 70만원 이상
+# 회원 ID, 닉네임, 총 거래 금액
+# 총 거래 금액 오름차순
 
-select b.writer_id, u.nickname, sum(b.price) as TOTAL_SALES
-from USED_GOODS_BOARD as b
-inner join USED_GOODS_USER as u
-on b.writer_id = u.user_id
-where b.status = 'DONE'
-group by b.writer_id, u.nickname
-having sum(b.price) >= 700000
-order by TOTAL_SALES asc
+SELECT UU.USER_ID, UU.NICKNAME, SUM(UB.PRICE) AS TOTAL_SALES
+FROM USED_GOODS_BOARD AS UB
+INNER JOIN USED_GOODS_USER AS UU
+ON UB.WRITER_ID = UU.USER_ID
+WHERE UB.STATUS = 'DONE'
+GROUP BY UU.USER_ID, UU.NICKNAME
+HAVING SUM(UB.PRICE) >= 700000
+ORDER BY TOTAL_SALES ASC
