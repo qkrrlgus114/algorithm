@@ -1,40 +1,28 @@
 import java.util.*;
 
 class Solution {
-    static int staticCol = 0;
     public int solution(int[][] data, int col, int row_begin, int row_end) {
-        staticCol = col - 1;
         
-        for(int i=0; i<data.length; i++){
-            Arrays.sort(data, new Comparator<int[]>(){
-                public int compare(int[] o1, int[] o2){
-                    if(o1[staticCol] == o2[staticCol]){
-                        return o2[0] - o1[0];
-                    }
-                    return o1[staticCol] - o2[staticCol];
+        // 정렬
+        Arrays.sort(data, new Comparator<int[]>(){
+            public int compare(int[] o1, int[] o2){
+                if(o1[col-1] == o2[col-1]){
+                    return o2[0] - o1[0];
                 }
-            });
-        }
+                return o1[col-1] - o2[col-1];
+            }
+        });
         
-        row_begin -= 1;
-        row_end -= 1;
+        int result = 0;
         
-        List<Integer> list = new ArrayList<>();
-        for(int i=row_begin; i<=row_end; i++){
-            int sum = 0;
+        for(int i=row_begin - 1; i < row_end; i++){
+            int value = 0;
             for(int j=0; j<data[i].length; j++){
-                sum += data[i][j] % (i + 1);
+                value += data[i][j] % (i+1);
             }
-            list.add(sum);
+            result ^= value;
         }
         
-        int answer = list.get(0);
-        if(list.size() >= 2){
-            for(int i=1; i<list.size(); i++){
-                answer ^= list.get(i);
-            }
-        }
-        
-        return answer;
+        return result;
     }
 }
