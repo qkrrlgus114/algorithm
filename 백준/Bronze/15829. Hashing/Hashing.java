@@ -20,8 +20,8 @@ public class Main {
             int value = c - 'a' + 1;
             answer += value * arr[i];
         }
-
-        System.out.println(answer);
+        
+        System.out.println(answer % 1234567891);
     }
 
     private static void preCheck(){
