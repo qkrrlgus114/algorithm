@@ -7,27 +7,39 @@ public class Main {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(bf.readLine());
-        int S = Integer.parseInt(bf.readLine());
-        String M = bf.readLine();
+        int M = Integer.parseInt(bf.readLine());
+        String S = bf.readLine();
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("I");
-        int count = 1;
-        while(count <= N){
-            sb.append("OI");
-            count++;
-        }
-
+        int findCount = N * 2 + 1;
         int answer = 0;
-        String target = sb.toString();
-        String replace = target.substring(2, target.length());
+        boolean check = false;
 
-        while(true){
-            if(M.contains(target)){
-                answer++;
-                M = M.replaceFirst(target, replace);
+        Stack<Character> s = new Stack<>();
+        int count = 0;
+        for(int i=0; i<M; i++){
+            char c = S.charAt(i);
+            if(check){
+                if(c == 'O'){
+                    count = 0;
+                }else{
+                    count++;
+                    check = false;
+                }
             }else{
-                break;
+                if(c == 'O'){
+                    count++;
+                    check = true;
+                }else{
+                    count = 1;
+                }
+            }
+            s.push(c);
+
+            if(count == findCount){
+                answer++;
+                s.pop();
+                s.pop();
+                count -= 2;
             }
         }
 
