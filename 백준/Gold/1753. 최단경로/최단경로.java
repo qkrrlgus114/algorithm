@@ -1,5 +1,6 @@
 import org.w3c.dom.Node;
 
+import java.awt.image.VolatileImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +11,7 @@ public class Main {
     static int V, E;
     static List<Edge>[] list;
     static int[] dist;
+    static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -33,8 +35,10 @@ public class Main {
         }
 
         dist = new int[V + 1];
+        visited = new boolean[V + 1];
         Arrays.fill(dist, Integer.MAX_VALUE);
         dist[x] = 0;
+        visited[x] = true;
 
         dijkstra(x);
 
@@ -56,10 +60,12 @@ public class Main {
 
         while(!pq.isEmpty()){
             Edge cur = pq.poll();
+            visited[cur.node] = true;
 
             for(Edge next : list[cur.node]){
                 int nextNode = next.node;
                 int nextValue = next.value + cur.value;
+                if(visited[nextNode]) continue;
 
                 if(dist[nextNode] > nextValue){
                     dist[nextNode] = nextValue;
