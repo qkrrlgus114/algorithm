@@ -1,57 +1,53 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.*;
 
 public class Main {
 
-    static boolean check = true;
-
+    /*
+    * 해당 위치에 이미 알파벳이 있다면 행운의 바퀴 X
+    * */
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String[] sa = bf.readLine().split(" ");
-        int N = Integer.parseInt(sa[0]);
-        int M = Integer.parseInt(sa[1]);
-        // 알파벳 나왔는지 체크 필요
-        boolean[] alpha = new boolean[26];
-        String[] arr = new String[N];
-        Arrays.fill(arr, "?");
+        int N = Integer.parseInt(sa[0]); // 바퀴의 칸의 수
+        int K = Integer.parseInt(sa[1]); // 바퀴 돌리는 횟수
+        int cur = 0; // 현재 위치
+        Map<String, Integer> map = new HashMap<>();
 
-        // 현재 위치
-        int cur = 0;
+        String[] alphabet = new String[N];
+        boolean check = true;
+        Arrays.fill(alphabet, "?");
 
-        for (int i = 0; i < M; i++) {
+        for(int k=0; k<K; k++){
             sa = bf.readLine().split(" ");
-            int next = Integer.parseInt(sa[0]);
-            String word = sa[1];
+            int cycle = Integer.parseInt(sa[0]);
+            String alpha = sa[1];
 
-            next %= N;
-            if(cur - next < 0){
-                cur = N - (next - cur);
+            cur = (cur + cycle) % N;
+            if((alphabet[cur].equals("?") && !map.containsKey(alpha)) || alphabet[cur].equals(alpha)){
+                alphabet[cur] = alpha;
+                map.put(alpha, 0);
             }else{
-                cur -= next;
-            }
-            if(arr[cur].equals("?")){
-                if(alpha[word.charAt(0) - 65]){
-                    System.out.println("!");
-                    break;
-                }
-                arr[cur] = word;
-                alpha[word.charAt(0) - 65] = true;
-            }else if(!arr[cur].equals(word)){
-                System.out.println("!");
+                check = false;
                 break;
             }
-
-            if(i == M-1){
-                StringBuilder sb = new StringBuilder();
-                for(int q=0; q<arr.length; q++){
-                    sb.append(arr[cur++]);
-                    if(cur == N) cur = 0;
-                }
-                System.out.println(sb);
-            }
         }
+
+        if(!check){
+            System.out.println("!");
+        }else{
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<N; i++){
+                sb.append(alphabet[cur]);
+                cur--;
+                if(cur == -1) cur = N - 1;
+            }
+            System.out.println(sb);
+        }
+
     }
+
 }
