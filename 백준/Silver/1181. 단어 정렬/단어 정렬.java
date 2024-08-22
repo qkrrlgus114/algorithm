@@ -1,38 +1,38 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import javax.xml.crypto.dsig.keyinfo.KeyInfo;
+import java.io.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String s = bf.readLine();
-        int N = Integer.parseInt(s);
 
-        List<String> list = new ArrayList<>();
+        int N = Integer.parseInt(bf.readLine());
+
+        Set<String> set = new HashSet<>();
         for(int i=0; i<N; i++){
-            s = bf.readLine();
-            list.add(s);
+            set.add(bf.readLine());
         }
 
-        HashSet<String> set = new HashSet<>(list);
-        List<String> new_list = new ArrayList<>(set);
+        String[] arr = set.stream().toArray(String[]::new);
 
-        Collections.sort(new_list, new Comparator<String>(){
+        Arrays.sort(arr, new Comparator<String>(){
             public int compare(String o1, String o2){
                 if(o1.length() == o2.length()){
                     return o1.compareTo(o2);
-                }else{
-                    return o1.length() - o2.length();
                 }
+                return o1.length() - o2.length();
             }
         });
 
         StringBuilder sb = new StringBuilder();
-        for(String word : new_list){
-            sb.append(word).append("\n");
+        for(int i=0; i<arr.length; i++){
+            sb.append(arr[i]).append("\n");
         }
+
         System.out.println(sb);
     }
 }
