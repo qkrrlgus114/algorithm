@@ -1,7 +1,5 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InterfaceAddress;
+import javax.xml.crypto.dsig.keyinfo.KeyInfo;
+import java.io.*;
 import java.util.Arrays;
 
 public class Main {
@@ -9,21 +7,20 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String s = bf.readLine();
-        Integer[] arr = new Integer[Integer.parseInt(s)];
-        for(int i=0; i<arr.length; i++){
-            s = bf.readLine();
-            arr[i] = Integer.parseInt(s);
+        int N = Integer.parseInt(bf.readLine());
+
+        Integer[] arr = new Integer[N];
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(bf.readLine());
         }
 
         Arrays.sort(arr);
 
         StringBuilder sb = new StringBuilder();
-        for(Integer i : arr){
-            sb.append(i).append("\n");
+        for(Integer num : arr){
+            sb.append(num).append("\n");
         }
 
         System.out.println(sb);
-
     }
 }
