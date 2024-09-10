@@ -1,52 +1,47 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Main {
-
-    static int N, M;
-    static int[] ground;
-    static int[] sums;
-
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
         String[] sa = bf.readLine().split(" ");
-        N = Integer.parseInt(sa[0]);
-        M = Integer.parseInt(sa[1]);
-        ground = new int[N + 1];
-        sums = new int[N + 2];
+        int N = Integer.parseInt(sa[0]);
+        int M = Integer.parseInt(sa[1]);
+
+        int[] ground = new int[N];
         sa = bf.readLine().split(" ");
-        for (int i = 1; i <= N; i++) {
-            ground[i] = Integer.parseInt(sa[i - 1]);
+        for(int i=0; i<N; i++){
+            ground[i] = Integer.parseInt(sa[i]);
         }
 
-        for (int i = 0; i < M; i++) {
+        int[] sand = new int[N + 1];
+
+        for(int i=0; i<M; i++){
             sa = bf.readLine().split(" ");
-            int start = Integer.parseInt(sa[0]);
-            int end = Integer.parseInt(sa[1]);
-            int H = Integer.parseInt(sa[2]);
+            int a = Integer.parseInt(sa[0]);
+            int b = Integer.parseInt(sa[1]);
+            int k = Integer.parseInt(sa[2]);
 
-            sums[start] += H;
-            sums[end + 1] += -H;
+            sand[a - 1] += k;
+            sand[b] += k * -1;
         }
 
-        int value = 0;
-        for (int i = 1; i <= N; i++) {
-            value += sums[i];
-            ground[i] += value;
-        }
-
+        int mid = 0;
         StringBuilder sb = new StringBuilder();
-        for(int i=1; i<=N; i++){
+        for(int i=0; i<N; i++){
+            mid += sand[i];
+            ground[i] += mid;
+
             sb.append(ground[i]).append(" ");
         }
 
         System.out.println(sb);
+
+
 
     }
 }
