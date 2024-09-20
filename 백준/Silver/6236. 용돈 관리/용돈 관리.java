@@ -1,15 +1,11 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import javax.xml.crypto.dsig.keyinfo.KeyInfo;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
     static int N, M;
-    static int[] arr;
-    static int result = Integer.MAX_VALUE;
+    static int[] days;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -17,54 +13,59 @@ public class Main {
         String[] sa = bf.readLine().split(" ");
         N = Integer.parseInt(sa[0]);
         M = Integer.parseInt(sa[1]);
-        arr = new int[N];
 
-        int min = 0;
-        int max = 0;
+        days = new int[N];
+        long max = 0;
+        long maxPrice = 0;
         for(int i=0; i<N; i++){
-            String s = bf.readLine();
-            int temp = Integer.parseInt(s);
-
-            min = Math.max(min, temp);
-            max += temp;
-            arr[i] = temp;
+            days[i] = Integer.parseInt(bf.readLine());
+            max += days[i];
+            maxPrice = Math.max(maxPrice, days[i]);
         }
 
-        binarySearch(min, max);
+        long result = binarySearch(maxPrice, max);
+
         System.out.println(result);
     }
 
-    public static void binarySearch(int low, int high){
-        if(low > high){
-            return;
-        }
+    public static long binarySearch(long l, long r){
+        long result = Long.MAX_VALUE;
 
-        int mid = (low + high) / 2;
+        while(l <= r){
+            long K = (l + r) / 2;
+            int drawCnt = 0;
+            long money = 0;
 
-        // 잔고
-        int price = 0;
-        int count = 0;
-        for(int i=0; i<N; i++){
-            if(price - arr[i] >= 0){
-                if(N - i == M - count){
-                    price = mid;
-                    count++;
+            for(int i=0; i<N; i++){
+                int price = days[i];
+                // 돈이 부족할 경우 무조건 통장에 넣고 K원 인출해야함.
+                if(money < price){
+                    money = K;
+                    money -= price;
+                    drawCnt++;
                 }
-                price -= arr[i];
-            }else if(price - arr[i] < 0){
-                price = mid;
-                count++;
-                price -= arr[i];
+                // 돈이 남아도는 경우
+                else{
+                    if(N - i == M - drawCnt){
+                        money = K;
+                        money -= price;
+                        drawCnt++;
+                    }else{
+                        money -= price;
+                    }
+                }
             }
+
+            if(M >= drawCnt){
+                r = K - 1;
+                result = Math.min(result, K);
+            }else{
+                l = K + 1;
+            }
+
+
         }
 
-        if(count > M){
-            binarySearch(mid + 1, high);
-        }else{
-            result = Math.min(result, mid);
-            binarySearch(low, mid - 1);
-        }
+        return result;
     }
-
-
 }
