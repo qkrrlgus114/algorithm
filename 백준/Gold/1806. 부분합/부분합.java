@@ -1,48 +1,48 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import javax.xml.crypto.dsig.keyinfo.KeyInfo;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] sa = bf.readLine().split(" ");
-        int N = Integer.parseInt(sa[0]);
-        int S = Integer.parseInt(sa[1]);
+		String[] sa = bf.readLine().split(" ");
 
-        // 정답
-        int min_length = Integer.MAX_VALUE;
+		int N = Integer.parseInt(sa[0]);
+		int S = Integer.parseInt(sa[1]);
 
-        int[] arr = new int[N];
-        sa = bf.readLine().split(" ");
-        for(int i=0; i<N; i++){
-            arr[i] = Integer.parseInt(sa[i]);
-        }
+		int[] arr = new int[N];
+		sa = bf.readLine().split(" ");
+		for(int i=0; i<N; i++){
+			arr[i] = Integer.parseInt(sa[i]);
+		}
 
-        int l = 0;
-        int r = 0;
-        int sum = arr[l];
-        while(true){
-            if(l > r) break;
+		int result = Integer.MAX_VALUE;
+		int l = 0;
+		int r = 0;
+		long sum = 0;
 
-            if(sum >= S){
-                if(r - l + 1 < min_length){
-                    min_length = r - l + 1;
-                }
-                l++;
-                sum -= arr[l-1];
-            }else if(sum < S){
-                r++;
-                if(r >= N) break;
-                sum += arr[r];
-            }
-        }
-        if(min_length == Integer.MAX_VALUE) System.out.println(0);
-        else System.out.println(min_length);
-    }
+		while(true){
+			if(sum >= S){
+				result = Math.min(result, r - l);
+				sum -= arr[l++];
+				if(l >= N) break;
+				continue;
+			}else{
+				if(r >= N) break;
+			}
+
+			if(N > r){
+				sum += arr[r++];
+			}
+
+		}
+
+		if(result == Integer.MAX_VALUE) System.out.println(0);
+		else System.out.println(result);
+
+	}
 
 }
