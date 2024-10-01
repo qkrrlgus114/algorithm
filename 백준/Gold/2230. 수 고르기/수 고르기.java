@@ -1,46 +1,40 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import javax.xml.crypto.dsig.keyinfo.KeyInfo;
+import java.io.*;
+import java.sql.SQLOutput;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] sa = bf.readLine().split(" ");
-        int N = Integer.parseInt(sa[0]);
-        int M = Integer.parseInt(sa[1]);
+		String[] sa = bf.readLine().split(" ");
 
-        int[] arr = new int[N];
-        for(int i=0; i<N; i++){
-            String s = bf.readLine();
-            arr[i] = Integer.parseInt(s);
-        }
+		int N = Integer.parseInt(sa[0]);
+		int M = Integer.parseInt(sa[1]);
 
-        Arrays.sort(arr);
+		int[] arr = new int[N];
+		for(int i=0; i<N; i++){
+			arr[i] = Integer.parseInt(bf.readLine());
+		}
+		Arrays.sort(arr);
 
-        int l = 0;
-        int r = 0;
-        int result = Integer.MAX_VALUE;
-        while(true){
-            if(l > r) break;
+		int result = Integer.MAX_VALUE;
+		int l = 0;
+		int r = 0;
 
-            int sum = Math.abs(arr[l] - arr[r]);
+		while(r < N && l < N){
+			if(arr[r] - arr[l] >= M){
+				result = Math.min(result, arr[r] - arr[l]);
+				l++;
+			}else{
+				r++;
+			}
+		}
 
-            if(sum >= M){
-                result = Math.min(result, sum);
-                l++;
-            }else{
-                r++;
-                if(r >= N) break;
-            }
-        }
+		System.out.println(result);
 
-        System.out.println(result);
-
-    }
+	}
 
 }
