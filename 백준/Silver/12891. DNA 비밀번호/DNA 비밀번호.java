@@ -1,78 +1,74 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.xml.crypto.dsig.keyinfo.KeyInfo;
+import java.io.*;
+import java.sql.SQLOutput;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Main {
 
-    // A C G T
-    static int[] check = new int[4];
-    static int[] count = new int[4];
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		String[] sa = bf.readLine().split(" ");
+		int S = Integer.parseInt(sa[0]);
+		int P = Integer.parseInt(sa[1]);
 
-        String[] sa = bf.readLine().split(" ");
-        int S = Integer.parseInt(sa[0]);
-        int P = Integer.parseInt(sa[1]);
+		char[] charDna = bf.readLine().toCharArray();
 
-        String word = bf.readLine();
-        char[] sequence = word.toCharArray();
+		// 우리가 확인해야하는 cnt
+		int[] PCnt = new int[4];
+		int[] SCnt = new int[4];
+		sa = bf.readLine().split(" ");
+		for (int i = 0; i < 4; i++) {
+			SCnt[i] = Integer.parseInt(sa[i]);
+		}
 
-        sa = bf.readLine().split(" ");
-        for(int i=0; i<4; i++){
-            if(i==0) check[i] = Integer.parseInt(sa[i]);
-            else if(i==1) check[i] = Integer.parseInt(sa[i]);
-            else if(i==2) check[i] = Integer.parseInt(sa[i]);
-            else if(i==3) check[i] = Integer.parseInt(sa[i]);
-        }
+		int l = 0;
+		int r = P - 1;
+		int result = 0;
 
-        int result = 0;
-        // 현재 비밀번호의 시퀀스
-        count = new int[4];
-        // 초기 비밀번호 설정
-        for(int i=0; i <= P-1; i++){
-            if(sequence[i] == 'A') count[0]++;
-            else if(sequence[i] == 'C') count[1]++;
-            else if(sequence[i] == 'G') count[2]++;
-            else if(sequence[i] == 'T') count[3]++;
-        }
-        // 조건에 맞는지 확인
-        if(successPassword(count)){
-            result++;
-        }
-        // 앞자리 하나 삭제
-        if(sequence[0] == 'A') count[0]--;
-        else if(sequence[0] == 'C') count[1]--;
-        else if(sequence[0] == 'G') count[2]--;
-        else if(sequence[0] == 'T') count[3]--;
+		for (int i = l; i <= r; i++) {
+			addCnt(i, PCnt, charDna);
+		}
 
-        // 모든 경우의 수 탐색
-        for(int i=1; i<=S-P; i++){
-            // 마지막 값 더해줌
-            if(sequence[i+P-1] == 'A') count[0]++;
-            else if(sequence[i+P-1] == 'C') count[1]++;
-            else if(sequence[i+P-1] == 'G') count[2]++;
-            else if(sequence[i+P-1] == 'T') count[3]++;
+		if (check(PCnt, SCnt)) result++;
 
-            if(successPassword(count)){
-                result++;
-            }
+		while (r < S) {
+			removeCnt(l, PCnt, charDna);
+			l++;
+			r++;
+			if (r >= S) break;
+			addCnt(r, PCnt, charDna);
 
-            // 앞자리 하나 삭제
-            if(sequence[i] == 'A') count[0]--;
-            else if(sequence[i] == 'C') count[1]--;
-            else if(sequence[i] == 'G') count[2]--;
-            else if(sequence[i] == 'T') count[3]--;
-        }
+			if (check(PCnt, SCnt)) result++;
+		}
 
-        System.out.println(result);
-    }
+		System.out.println(result);
 
-    public static boolean successPassword(int[] count){
-        if(count[0] >= check[0] && count[1] >= check[1] &&
-                count[2] >= check[2] && count[3] >= check[3]) return true;
-        return false;
-    }
+
+	}
+
+	public static void addCnt(int index, int[] cnt, char[] charDna) {
+		if (charDna[index] == 'A') cnt[0]++;
+		else if (charDna[index] == 'C') cnt[1]++;
+		else if (charDna[index] == 'G') cnt[2]++;
+		else if (charDna[index] == 'T') cnt[3]++;
+	}
+
+	public static void removeCnt(int index, int[] cnt, char[] charDna) {
+		if (charDna[index] == 'A') cnt[0]--;
+		else if (charDna[index] == 'C') cnt[1]--;
+		else if (charDna[index] == 'G') cnt[2]--;
+		else if (charDna[index] == 'T') cnt[3]--;
+	}
+
+	public static boolean check(int[] PCnt, int[] SCnt) {
+		for (int i = 0; i < 4; i++) {
+			if (PCnt[i] < SCnt[i]) return false;
+		}
+
+		return true;
+	}
+
 
 }
