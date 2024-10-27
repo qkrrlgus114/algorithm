@@ -1,36 +1,34 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] s = bf.readLine().split(" ");
-        int N = Integer.parseInt(s[0]);
-        int K = Integer.parseInt(s[1]);
-        // 동전의 개수
-        int sum = 0;
+		String[] sa = bf.readLine().split(" ");
+		int N = Integer.parseInt(sa[0]);
+		int K = Integer.parseInt(sa[1]);
 
-        int[] coin = new int[N];
-        for(int i=0; i<N; i++){
-            String q = bf.readLine();
-            coin[i] = Integer.parseInt(q);
-        }
+		int[] coins = new int[N];
+		for (int i = 0; i < N; i++) {
+			coins[i] = Integer.parseInt(bf.readLine());
+		}
 
-        for(int i=N-1; i>=0; i--){
-            if(K==0){
-                break;
-            }
-            if(K >= coin[i]){
-                int temp = K / coin[i];
-                sum += temp;
-                K -= temp * coin[i];
-            }
-        }
+		int coinCnt = 0;
+		int curCoin = 0;
+		for (int i = N - 1; i >= 0; i--) {
+			int coin = coins[i];
 
-        System.out.println(sum);
-    }
+			if(coin > K - curCoin) continue;
+
+			int a = (K - curCoin) / coin;
+			coinCnt += a;
+			curCoin = curCoin + (coin * a);
+		}
+
+		System.out.println(coinCnt);
+
+	}
 }
