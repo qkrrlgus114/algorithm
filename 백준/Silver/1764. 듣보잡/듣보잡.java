@@ -1,39 +1,40 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
+
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] inputs = br.readLine().split(" ");
-        int n = Integer.parseInt(inputs[0]);
-        int m = Integer.parseInt(inputs[1]);
 
-        HashSet<String> set = new HashSet<>();
-        for (int i = 0; i < n; i++) {
-            set.add(br.readLine());
-        }
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        ArrayList<String> result = new ArrayList<>();
-        for (int i = 0; i < m; i++) {
-            String tmp = br.readLine();
-            if(set.contains(tmp)){
-                result.add(tmp);
-            }
-        }
-
-        Collections.sort(result);
-
-        // print result
-        System.out.println(result.size());
-        for (String s : result) {
-            System.out.println(s);
-        }
-    }
+		List<String> list = new ArrayList<>();
+		// 듣도 못한 사람 set
+		Set<String> set = new HashSet<>();
 
 
+		String[] sa = bf.readLine().split(" ");
+		int N = Integer.parseInt(sa[0]);
+		int M = Integer.parseInt(sa[1]);
+
+		for(int i=0; i<N; i++){
+			set.add(bf.readLine());
+		}
+
+		for(int i=0; i<M; i++){
+			String name = bf.readLine();
+			if(set.contains(name)){
+				list.add(name);
+			}
+		}
+
+		System.out.println(list.size());
+		StringBuilder sb = new StringBuilder();
+		Collections.sort(list);
+		for(int i=0; i<list.size(); i++){
+			sb.append(list.get(i)).append("\n");
+		}
+
+		System.out.println(sb);
+
+	}
 }
