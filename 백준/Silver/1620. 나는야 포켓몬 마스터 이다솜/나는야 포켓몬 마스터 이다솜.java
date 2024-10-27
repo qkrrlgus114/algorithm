@@ -1,35 +1,38 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
+
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		Map<Integer, String> map1 = new HashMap<>();
+		Map<String, Integer> map2 = new HashMap<>();
+		int cnt = 1;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String[] sa = bf.readLine().split(" ");
-        int N = Integer.parseInt(sa[0]);
-        int M = Integer.parseInt(sa[1]);
-        HashMap<String, String> map1 = new HashMap<>();
-        HashMap<String, String> map2 = new HashMap<>();
+		String[] sa = bf.readLine().split(" ");
+		int N = Integer.parseInt(sa[0]);
+		int M = Integer.parseInt(sa[1]);
 
-        for(int i=0; i<N; i++){
-            String s = bf.readLine();
-            map1.put(String.valueOf(i+1), s);
-            map2.put(s, String.valueOf(i+1));
-        }
+		for (int i = 0; i < N; i++) {
+			String s = bf.readLine();
+			map1.put(cnt, s);
+			map2.put(s, cnt++);
+		}
 
-        for(int i=0; i<M; i++){
-            String s = bf.readLine();
-            String poketmon = map1.get(s);
-            if(poketmon == null){
-                String index = map2.get(s);
-                System.out.println(index);
-            }else{
-                System.out.println(poketmon);
-            }
-        }
-    }
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < M; i++) {
+			String s = bf.readLine();
+			try{
+				int num = Integer.parseInt(s.toString());
+				sb.append(map1.get(num)).append("\n");
+			}catch (NumberFormatException e){
+				sb.append(map2.get(s.toString())).append("\n");
+			}
+		}
 
+		System.out.println(sb.toString());
+
+
+	}
 }
