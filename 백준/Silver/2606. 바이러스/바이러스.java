@@ -1,59 +1,57 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.util.*;
 
 public class Main {
 
-    static int N;
-    static int E;
-    static boolean[] check;
-    static ArrayList<Integer>[] arr;
+	static int N, M;
+	static List<Integer>[] computers;
+	static boolean[] visited;
 
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
+		N = Integer.parseInt(bf.readLine());
+		M = Integer.parseInt(bf.readLine());
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		computers = new List[N + 1];
+		for (int i = 0; i <= N; i++) {
+			computers[i] = new ArrayList<>();
+		}
+		visited = new boolean[N + 1];
 
-        int N = Integer.parseInt(bf.readLine());
-        int E = Integer.parseInt(bf.readLine());
+		for (int i = 0; i < M; i++) {
+			String[] sa = bf.readLine().split(" ");
+			int start = Integer.parseInt(sa[0]);
+			int end = Integer.parseInt(sa[1]);
 
-        arr = new ArrayList[N+1];
-        for(int i=0; i < N+1; i++){
-            arr[i] = new ArrayList<>();
-        }
+			computers[start].add(end);
+			computers[end].add(start);
+		}
 
-        check = new boolean[N+1];
+		int result = bfs(1);
 
-        for(int i=0; i<E; i++){
-            String[] str = bf.readLine().split(" ");
+		System.out.println(result);
 
-            arr[Integer.parseInt(str[0])].add(Integer.parseInt(str[1]));
-            arr[Integer.parseInt(str[1])].add(Integer.parseInt(str[0]));
-        }
+	}
 
-        int count = bfs();
-        System.out.println(count);
-    }
+	private static int bfs(int x) {
+		int result = 0;
+		Queue<Integer> q = new LinkedList<>();
+		q.add(x);
+		visited[x] = true;
 
-    public static int bfs(){
-        PriorityQueue<Integer> q = new PriorityQueue();
-        q.add(1);
-        int count = 0;
-        check[1] = true;
+		while(!q.isEmpty()){
+			x = q.poll();
+			for(int i=0; i<computers[x].size(); i++){
+				int next = computers[x].get(i);
+				if(visited[next]) continue;
+				visited[next] = true;
+				q.add(next);
+				result++;
+			}
+		}
 
-        while(q.size() != 0){
-            int temp = q.poll();
-
-            for(int i=0; i<arr[temp].size(); i++){
-                int curr = arr[temp].get(i);
-                if(!check[curr]){
-                    count ++;
-                    check[curr] = true;
-                    q.add(curr);
-                }
-            }
-        }
-        return count;
-    }
+		return result;
+	}
 }
