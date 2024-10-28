@@ -1,43 +1,41 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-    static int[] memo;
+	static int[] cnt = new int[12];
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String t = bf.readLine();
-        int T = Integer.parseInt(t);
+		for(int i=1; i<=11; i++){
+			dfs(i, 0);
+		}
 
-        memo = new int[12];
-        memo[1] = 1;
-        memo[2] = 2;
-        memo[3] = 4;
-        memo[4] = 7;
+		int T = Integer.parseInt(bf.readLine());
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<T; i++){
+			int num = Integer.parseInt(bf.readLine());
+			sb.append(cnt[num]).append("\n");
+		}
 
-        for (int q = 0; q < T; q++) {
-            t = bf.readLine();
-            int N = Integer.parseInt(t);
+		System.out.println(sb);
 
-            if(N > 4){
-                int result = dp(N);
-                System.out.println(result);
-            }else{
-                System.out.println(memo[N]);
-            }
-        }
+	}
 
-    }
+	private static void dfs(int num, int cur){
+		if(num == cur){
+			cnt[num]++;
+			return;
+		}
 
-    public static int dp(int x){
-        if(memo[x] != 0){
-            return memo[x];
-        }
+		if(num < cur){
+			return;
+		}
 
-        return memo[x] = dp(x-1) + dp(x-2) + dp(x-3);
-    }
+		for(int i=1; i<=3; i++){
+			dfs(num, cur + i);
+		}
+	}
 }
