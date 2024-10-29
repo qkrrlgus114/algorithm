@@ -1,36 +1,31 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
-    static Long[] dp;
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String n = bf.readLine();
-        int T = Integer.parseInt(n);
-        for(int t=0; t<T; t++){
-            n = bf.readLine();
-            int N = Integer.parseInt(n);
+		long[] memo = new long[101];
+		memo[1] = memo[2] = memo[3] = 1;
 
-            dp = new Long[N + 1];
-            if(N <= 3){
-                System.out.println(1);
-            }else{
-                for(int i=1; i<=3; i++){
-                    dp[i] = 1L;
-                }
+		for (int i = 4; i <= 100; i++) {
+			memo[i] = memo[i - 2] + memo[i - 3];
+		}
 
-                for(int i=4; i<=N; i++){
-                    dp[i] = dp[i-2] + dp[i-3];
-                }
-                System.out.println(dp[N]);
-            }
-        }
+		StringBuilder sb = new StringBuilder();
 
+		int T = Integer.parseInt(bf.readLine());
 
-    }
+		for (int t = 0; t < T; t++) {
+			int N = Integer.parseInt(bf.readLine());
+			sb.append(memo[N]).append("\n");
+		}
+
+		System.out.println(sb);
+
+	}
 
 }
