@@ -1,74 +1,78 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Main {
 
-    static int[][] arr;
-    // 상 우 하 좌
-    static int[] dx = {0, 1, 0, -1};
-    static int[] dy = {-1, 0, 1, 0};
-    static int W;
-    static int H;
-    static int result;
+	static int N, M, num;
+	static int[][] graph;
+	static boolean[][] visited;
+	// 상 하 좌 우
+	static int[] dy = {-1, 1, 0, 0};
+	static int[] dx = {0, 0, -1, 1};
 
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
+		int T = Integer.parseInt(bf.readLine());
+		StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		for (int t = 0; t < T; t++) {
+			String[] sa = bf.readLine().split(" ");
+			M = Integer.parseInt(sa[0]);
+			N = Integer.parseInt(sa[1]);
+			num = Integer.parseInt(sa[2]);
 
-        int T = Integer.parseInt(bf.readLine());
+			graph = new int[N][M];
+			visited = new boolean[N][M];
 
-        // 테스트 케이스 개수
-        for(int k=0; k<T; k++){
-            result = 0;
-            String[] str = bf.readLine().split(" ");
+			for (int i = 0; i < num; i++) {
+				sa = bf.readLine().split(" ");
+				int W = Integer.parseInt(sa[0]);
+				int H = Integer.parseInt(sa[1]);
 
-            W = Integer.parseInt(str[0]); // 가로
-            H = Integer.parseInt(str[1]); // 세로
-            int count = Integer.parseInt(str[2]); // 배추 개수
+				graph[H][W] = 1;
+			}
 
-            arr = new int[H][W];
+			int result = 0;
 
-            for(int i=0; i<count; i++){
-                String[] temp = bf.readLine().split(" ");
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < M; j++) {
+					if(visited[i][j] || graph[i][j] == 0) continue;
+					bfs(i, j);
+					result++;
+				}
+			}
 
-                arr[Integer.parseInt(temp[1])][Integer.parseInt(temp[0])] = 1;
-            }
+			sb.append(result).append("\n");
+		}
 
-            for(int i=0; i<H; i++){
-                for(int j=0; j<W; j++){
-                    if(arr[i][j] == 1){
-                        bfs(i, j);
-                        result ++;
-                    }
-                }
-            }
-            System.out.println(result);
-        }
-    }
+		System.out.println(sb);
+	}
 
-    public static void bfs(int y, int x){
-        Queue<int[]> q = new LinkedList<>();
+	private static void bfs(int y, int x){
+		Queue<int[]> q = new LinkedList<>();
+		q.add(new int[]{y, x});
+		visited[y][x] = true;
 
-        q.add(new int[]{y,x});
-        arr[y][x] = 0;
-        while(q.size() != 0){
-            int[] temp = q.poll();
-            int ny = temp[0];
-            int nx = temp[1];
+		while(!q.isEmpty()){
+			int[] temp = q.poll();
+			y = temp[0];
+			x = temp[1];
 
-            for(int i=0; i<4; i++){
-                int ndy = ny + dy[i];
-                int ndx = nx + dx[i];
-                if(ndy >= 0 && ndy < H && ndx >= 0 && ndx < W){
-                    if(arr[ndy][ndx] == 1){
-                        arr[ndy][ndx] = 0;
-                        q.add(new int[]{ndy, ndx});
-                    }
-                }
-            }
-        }
-    }
+			for(int i=0; i<4; i++){
+				int ndx = dx[i] + x;
+				int ndy = dy[i] + y;
+				if(ndx < 0 || ndy < 0 || ndy >= N || ndx >= M) continue;
+				if(visited[ndy][ndx] || graph[ndy][ndx] == 0) continue;
+				visited[ndy][ndx] = true;
+				q.add(new int[]{ndy, ndx});
+			}
+		}
+	}
+
 }
