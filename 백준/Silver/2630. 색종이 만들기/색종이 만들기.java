@@ -1,72 +1,60 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
 
 public class Main {
-    /*
-    1 : 하얀색, 0 : 검은색
-    * 1X1 -> 1 : 34, 0 : 30
-    * 2x2 -> 1 : 8 - 4 + 1, 0 : 7
-    * 4x4 -> 1 : 1, 0 : 0
-    * 8x8 -> 1 : 0, 0 : 0
-    */
 
-    static int N;
-    static int[][] graph;
-    static int white, blue = 0;
+	static int[][] paper;
+	static int blue, white = 0;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String s = bf.readLine();
-        N = Integer.parseInt(s);
+		int size = Integer.parseInt(bf.readLine());
+		paper = new int[size][size];
 
-        graph = new int[N][N];
-        for (int i = 0; i < N; i++) {
-            String[] sa = bf.readLine().split(" ");
-            for (int j = 0; j < N; j++) {
-                graph[i][j] = Integer.parseInt(sa[j]);
-            }
-        }
+		for (int i = 0; i < size; i++) {
+			String[] sa = bf.readLine().split(" ");
+			for (int j = 0; j < size; j++) {
+				paper[i][j] = Integer.parseInt(sa[j]);
+			}
+		}
 
-        partition(0, 0, N);
-        System.out.println(white);
-        System.out.println(blue);
-    }
+		dfs(0, 0, size);
 
-    public static void partition(int y, int x, int size) {
-        if (check(y, x, size)) {
-            if (graph[y][x] == 1) {
-                blue++;
-            } else {
-                white++;
-            }
-            return;
-        }
+		System.out.println(white);
+		System.out.println(blue);
 
-        size = size / 2;
+	}
 
-        partition(y, x, size);
-        partition(y + size, x, size);
-        partition(y, x + size, size);
-        partition(y + size, x + size, size);
-    }
+	private static void dfs(int y, int x, int checkSize) {
+		// true 경우는 해당 칸이 전부 일치하는 색
+		if (check(y, x, checkSize)) {
+			if (paper[y][x] == 1) {
+				blue++;
+			} else {
+				white++;
+			}
+		} else {
+			dfs(y, x, checkSize / 2);
+			dfs(y + checkSize / 2, x, checkSize / 2);
+			dfs(y, x + checkSize / 2, checkSize / 2);
+			dfs(y + checkSize / 2, x + checkSize / 2, checkSize / 2);
+		}
+	}
 
+	private static boolean check(int y, int x, int checkSize) {
+		// 초기 값
+		int init = paper[y][x];
 
-    // 색종이 확인
-    public static boolean check(int y, int x, int size) {
-        int init = graph[y][x];
+		for (int i = y; i < y + checkSize; i++) {
+			for (int j = x; j < x + checkSize; j++) {
+				if (init != paper[i][j])
+					return false;
+			}
+		}
 
-        for (int i = y; i < y + size; i++) {
-            for (int j = x; j < x + size; j++) {
-                if (init != graph[i][j]) return false;
-            }
-        }
+		return true;
+	}
 
-        return true;
-    }
 }
-
-
-
