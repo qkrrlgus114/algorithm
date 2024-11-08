@@ -1,44 +1,43 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(bf.readLine());
-        Set<Integer> set = new HashSet<>();
-        List<Integer> list = new ArrayList<>();
+		int N = Integer.parseInt(bf.readLine());
 
-        String[] sa = bf.readLine().split(" ");
-        for(int i=0; i<N; i++){
-            int n = Integer.parseInt(sa[i]);
-            set.add(n);
-            list.add(n);
-        }
+		int[] arr = new int[N];
+		int[] sortArr = new int[N];
+		String[] sa = bf.readLine().split(" ");
 
-        List<Integer> sortList = new ArrayList<>(set);
-        Collections.sort(sortList);
+		for(int i=0; i<N; i++){
+			arr[i] = Integer.parseInt(sa[i]);
+			sortArr[i] = Integer.parseInt(sa[i]);
+		}
 
-        Map<Integer, Integer> map = new HashMap<>();
-        int index = 0;
-        for(Integer num : sortList){
-            map.put(num, index++);
-        }
+		Arrays.sort(sortArr);
 
-        List<Integer> result = new ArrayList<>();
-        for(Integer num : list){
-            result.add(map.get(num));
-        }
+		StringBuilder sb = new StringBuilder();
+		int idx = 0;
 
-        StringBuilder sb = new StringBuilder();
+		Map<Integer, Integer> map = new HashMap<>();
+		for(int i=0; i<N; i++){
+			if(!map.containsKey(sortArr[i])){
+				map.put(sortArr[i], idx++);
+			}
+		}
 
-        for(Integer num : result){
-            sb.append(num).append(" ");
-        }
-        
-        System.out.println(sb);
-    }
+		for(int i=0; i<N; i++){
+			sb.append(map.get(arr[i])).append(" ");
+		}
+
+		System.out.println(sb);
+	}
+
 }
