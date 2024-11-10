@@ -1,63 +1,77 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Main {
 
-    static char[][] arr;
-    static boolean[][] visited;
-    static int answer = 0;
-    static int N, M;
-    // 상하좌우
-    static int[] dx = {0, 0, -1, 1};
-    static int[] dy = {-1, 1, 0, 0};
+	static int N, M;
+	static boolean[][] visited;
+	static char[][] graph;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+	// 상하좌우
+	static int[] dx = {0, 0, -1, 1};
+	static int[] dy = {-1, 1, 0, 0};
 
-        String[] sa = bf.readLine().split(" ");
-        N = Integer.parseInt(sa[0]);
-        M = Integer.parseInt(sa[1]);
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        arr = new char[N][M];
-        visited = new boolean[N][M];
+		String[] sa = bf.readLine().split(" ");
+		N = Integer.parseInt(sa[0]);
+		M = Integer.parseInt(sa[1]);
 
-        for(int i=0; i<N; i++){
-            arr[i] = bf.readLine().toCharArray();
-        }
+		graph = new char[N][M];
+		visited = new boolean[N][M];
 
-        for(int i=0; i<N; i++){
-            for(int j=0; j<M; j++){
-                if(arr[i][j] == 'I'){
-                    bfs(i, j);
-                }
-            }
-        }
+		for (int i = 0; i < N; i++) {
+			graph[i] = bf.readLine().toCharArray();
+		}
 
-        System.out.println(answer != 0 ? answer : "TT");
-    }
+		// 도연이의 초기 위치
+		int doY = 0;
+		int doX = 0;
+		outer: for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if(graph[i][j] == 'I'){
+					doX = j;
+					doY = i;
+					break outer;
+				}
+			}
+		}
 
-    private static void bfs(int y, int x){
-        Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{y, x});
-        visited[y][x] = true;
+		int visitedCnt = bfs(doY, doX);
 
-        while(!q.isEmpty()){
-            int[] temp = q.poll();
-            y = temp[0];
-            x = temp[1];
-            for(int i=0; i<4; i++){
-                int ny = dy[i] + y;
-                int nx = dx[i] + x;
-                if(ny < 0 || nx < 0 || ny >= N || nx >= M) continue;
-                if(visited[ny][nx]) continue;
-                if(arr[ny][nx] == 'X') continue;
+		System.out.println(visitedCnt != 0 ? visitedCnt : "TT");
 
-                visited[ny][nx] = true;
-                if(arr[ny][nx] == 'P') answer++;
-                q.add(new int[]{ny, nx});
-            }
-        }
-    }
+	}
 
+	public static int bfs(int y, int x){
+		Queue<int[]> q = new LinkedList<>();
+		q.add(new int[]{y, x});
+		visited[y][x] = true;
+		int visitedCnt = 0;
+
+		while(!q.isEmpty()){
+			int[] temp = q.poll();
+			y = temp[0];
+			x = temp[1];
+			for(int i=0; i<4; i++){
+				int ndx = x + dx[i];
+				int ndy = y + dy[i];
+
+				if(ndy < 0 || ndx < 0 || ndy >= N || ndx >= M || graph[ndy][ndx] == 'X' || visited[ndy][ndx]){
+					continue;
+				}
+
+				if(graph[ndy][ndx] == 'P') visitedCnt++;
+				visited[ndy][ndx] = true;
+				q.add(new int[]{ndy, ndx});
+			}
+		}
+
+		return visitedCnt;
+	}
 
 }
