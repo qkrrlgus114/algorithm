@@ -4,51 +4,56 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
 public class Main {
 
-    static int N;
-    static int K;
-    static boolean[] visited;
+	static int N, K = 0;
+	static boolean[] visited = new boolean[100001];
+	static int[] arr = new int[100001];
 
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		String[] sa = bf.readLine().split(" ");
+		N = Integer.parseInt(sa[0]);
+		K = Integer.parseInt(sa[1]);
 
-        String[] s = bf.readLine().split(" ");
-        N = Integer.parseInt(s[0]);
-        K = Integer.parseInt(s[1]);
+		if (N == K) {
+			System.out.println(0);
+		} else {
+			int result = bfs();
+			System.out.println(result);
+		}
+	}
 
-        visited = new boolean[100002];
+	public static int bfs() {
+		Queue<int[]> q = new LinkedList<>();
+		q.add(new int[] {N, 0});
+		visited[N] = true;
 
-        int bfs = bfs();
-        System.out.println(bfs);
-    }
+		while (!q.isEmpty()) {
+			int[] temp = q.poll();
+			int cur = temp[0];
+			int second = temp[1];
 
-    public static int bfs() {
-        Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{N, 0});
+			if (cur == K)
+				return second;
 
-        while (!q.isEmpty()) {
-            int[] temp = q.poll();
-            int cur = temp[0];
-            int count = temp[1];
-            if(cur == K){
-                return count;
-            }
-            if (!visited[cur]) {
-                visited[cur] = true;
-                if (cur + 1 <= 100000) {
-                    q.add(new int[]{cur + 1, count + 1});
-                }
-                if (cur - 1 >= 0) {
-                    q.add(new int[]{cur - 1, count + 1});
-                }
-                if (cur * 2 <= 100000) {
-                    q.add(new int[]{cur * 2, count + 1});
-                }
-            }
-        }
-        return 0;
-    }
+			if (cur - 1 >= 0 && !visited[cur - 1]) {
+				visited[cur - 1] = true;
+				q.add(new int[] {cur - 1, second + 1});
+			}
+
+			if (cur + 1 <= 100000 && !visited[cur + 1]) {
+				visited[cur + 1] = true;
+				q.add(new int[] {cur + 1, second + 1});
+			}
+
+			if (cur * 2 <= 100000 && !visited[cur * 2]) {
+				visited[cur * 2] = true;
+				q.add(new int[] {cur * 2, second + 1});
+			}
+		}
+
+		return 0;
+	}
 }
