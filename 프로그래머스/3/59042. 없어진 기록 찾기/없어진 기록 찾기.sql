@@ -1,9 +1,9 @@
-# 입양 간 기록은 있는데
-# 보호소에 들어온 기록이 없는 
-# 동물 id, 이름 id
+# 입양 기록은 있는데 보호소에 들어온 기록이 없는
+# ID, 이름
+# ID ASC
 
-select ao.animal_id, ao.name
-from ANIMAL_OUTS as ao
-left join ANIMAL_INS as ai
-on ao.animal_id = ai.animal_id
-where ai.datetime is null
+SELECT AO.ANIMAL_ID, AO.NAME
+FROM ANIMAL_OUTS AO
+LEFT JOIN ANIMAL_INS AI ON AO.ANIMAL_ID = AI.ANIMAL_ID
+WHERE AI.DATETIME IS NULL
+ORDER BY AO.ANIMAL_ID ASC
