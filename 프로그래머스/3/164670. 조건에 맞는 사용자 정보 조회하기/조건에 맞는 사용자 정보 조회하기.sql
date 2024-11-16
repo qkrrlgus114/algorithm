@@ -1,14 +1,12 @@
-# 게시물 3건 이상 등록한
-# 사용자 id, 닉네임, 전체주소, 전화번호 조회
-# 회원 id 내림차순
+# 중고 거래 게시물 3건 이상 등록
+# ID, 닉네임, 전체주소, 전화번호
+# 시, 도로명 주소, 상세주소 출력되게
+# ID ASC
 
-select distinct(u.user_id), u.nickname, concat(u.city," ", u.street_address1, " ", u.street_address2) as '전체주소', 
-concat(substring(u.tlno, 1, 3), "-", substring(u.tlno, 4, 4), "-", substring(u.tlno, 8, 4)) as '전화번호'
-from USED_GOODS_BOARD as b
-inner join USED_GOODS_USER as u
-on b.writer_id = u.user_id
-where b.writer_id in (select writer_id
-    from USED_GOODS_BOARD 
-    group by writer_id 
-    having count(writer_id) >= 3)
-order by u.user_id desc
+SELECT UGB.WRITER_ID, UGU.NICKNAME, CONCAT(CONCAT(UGU.CITY, " ", UGU.STREET_ADDRESS1, " ", UGU.STREET_ADDRESS2)) AS '전체주소', 
+CONCAT(SUBSTR(UGU.TLNO, 1, 3), "-", SUBSTR(UGU.TLNO, 4, 4), "-", SUBSTR(UGU.TLNO, 8, 4)) AS '전화번호'
+FROM USED_GOODS_BOARD UGB
+INNER JOIN USED_GOODS_USER UGU ON UGB.WRITER_ID = UGU.USER_ID
+GROUP BY UGB.WRITER_ID, UGU.NICKNAME
+HAVING COUNT(UGB.WRITER_ID) >= 3
+ORDER BY UGU.USER_ID DESC
