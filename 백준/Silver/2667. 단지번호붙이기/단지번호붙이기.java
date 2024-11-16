@@ -1,74 +1,86 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 public class Main {
 
-    static int[][] map;
-    static ArrayList<Integer> result = new ArrayList<>();
-    // 전체 단지
-    static int count = 0;
-    // 상 우 하 좌 순서
-    static int[] dx = {0, 1, 0, -1};
-    static int[] dy = {-1, 0, 1, 0};
-    static int N;
+	static int N;
+	static char[][] graph;
+	static boolean[][] visited;
+	// 상하좌우
+	static int[] dy = {-1, 1, 0, 0};
+	static int[] dx = {0, 0, -1, 1};
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        N = Integer.parseInt(bf.readLine());
-        map = new int[N][N];
+		// 단지 내 집의 수를 저장 할 리스트
+		List<Integer> groupHouseCntList = new ArrayList<>();
+		// 단지의 수
+		int groupCnt = 0;
+		N = Integer.parseInt(bf.readLine());
 
-        for(int i=0; i<N; i++){
-            String s = bf.readLine();
-            for(int j=0; j<N; j++){
-                char c = s.charAt(j);
-                map[i][j] = ((int) c) - 48;
-            }
-        }
+		graph = new char[N][N];
+		visited = new boolean[N][N];
 
-        for(int i=0; i<N; i++){
-            for(int j=0; j<N; j++){
-                if (map[i][j] == 1){
-                    count++;
-                    bfs(i,j);
-                }
-            }
-        }
+		for (int i = 0; i < N; i++) {
+			graph[i] = bf.readLine().toCharArray();
+		}
 
-        System.out.println(count);
-        Collections.sort(result);
-        for(int q : result){
-            System.out.println(q);
-        }
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				if (visited[i][j] || graph[i][j] != '1')
+					continue;
 
-    }
+				visited[i][j] = true;
+				// 단지 내 집의 수
+				int groupHouseCnt = bfs(i, j);
+				groupCnt++;
+				groupHouseCntList.add(groupHouseCnt);
+			}
+		}
 
-    public static void bfs(int y, int x){
-        Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{y,x});
-        map[y][x] = 0;
-        int homeCount = 1;
+		Collections.sort(groupHouseCntList);
 
-        while(q.size() != 0){
-            int[] poll = q.poll();
-            int ny = poll[0];
-            int nx = poll[1];
-            for(int i=0; i<4; i++){
-                int ndx = nx + dx[i];
-                int ndy = ny + dy[i];
-                if (ndx >= 0 && ndy >= 0 && ndx < N && ndy < N){
-                    if (map[ndy][ndx] == 1){
-                        homeCount++;
-                        map[ndy][ndx] = 0;
-                        q.add(new int[]{ndy, ndx});
-                    }
-                }
-            }
-        }
-        // 전부 끝나면 결과에 집의 수를 더해준다.
-        result.add(homeCount);
-    }
+		StringBuilder sb = new StringBuilder();
+		sb.append(groupCnt).append("\n");
+		for (Integer cnt : groupHouseCntList) {
+			sb.append(cnt).append("\n");
+		}
+
+		System.out.println(sb);
+
+	}
+
+	public static int bfs(int y, int x) {
+		Queue<int[]> q = new LinkedList<>();
+		q.add(new int[] {y, x});
+		int houseCnt = 1;
+
+		while (!q.isEmpty()) {
+			int[] temp = q.poll();
+			y = temp[0];
+			x = temp[1];
+
+			for (int i = 0; i < 4; i++) {
+				int ndy = dy[i] + y;
+				int ndx = dx[i] + x;
+				if (ndy < 0 || ndx < 0 || ndy >= N || ndx >= N)
+					continue;
+				if (visited[ndy][ndx] || graph[ndy][ndx] != '1')
+					continue;
+
+				visited[ndy][ndx] = true;
+				houseCnt++;
+				q.add(new int[] {ndy, ndx});
+			}
+		}
+
+		return houseCnt;
+	}
 }
