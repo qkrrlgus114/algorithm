@@ -1,66 +1,74 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
-
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Main {
 
-    static int[][] map;
-    static boolean[][] visited;
-    // 상우하좌 순서
-    static int[] dy = {-1, 0, 1, 0};
-    static int[] dx = {0, 1, 0, -1};
-    static int N;
-    static int M;
+	static int N, M;
+	static char[][] miro;
+	static boolean[][] visited;
+	// 상하좌우
+	static int[] dx = {0, 0, -1, 1};
+	static int[] dy = {-1, 1, 0, 0};
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String[] s = bf.readLine().split(" ");
-        N = Integer.parseInt(s[0]);
-        M = Integer.parseInt(s[1]);
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        map = new int[N][M];
-        visited = new boolean[N][M];
-        for(int i=0; i<N; i++){
-            String temp = bf.readLine();
-            for(int j=0; j<temp.length(); j++){
-                map[i][j] = temp.charAt(j) - 48;
-            }
-        }
+		String[] sa = bf.readLine().split(" ");
+		N = Integer.parseInt(sa[0]);
+		M = Integer.parseInt(sa[1]);
 
-        int result = bfs(0, 0);
-        System.out.println(result);
-    }
+		visited = new boolean[N][M];
+		miro = new char[N][M];
+		for (int i = 0; i < N; i++) {
+			char[] array = bf.readLine().toCharArray();
+			for (int j = 0; j < M; j++) {
+				miro[i][j] = array[j];
+			}
+		}
 
-    public static int bfs(int x, int y){
-        Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{y,x,1});
-        visited[y][x] = true;
+		int step = bfs();
 
-        while(q.size() != 0){
-            int[] poll = q.poll();
-            y = poll[0];
-            x = poll[1];
-            int count = poll[2];
+		System.out.println(step);
 
-            for(int i=0; i<4; i++){
-                int ndy = y + dy[i];
-                int ndx = x + dx[i];
-                // 범위 내에 있는지 체크
-                if(ndy >= 0 && ndx >= 0 && ndy < N && ndx < M){
-                    if(!visited[ndy][ndx] && map[ndy][ndx] == 1){
-                        if(ndy == N-1 && ndx == M-1){
-                            return count + 1;
-                        }else{
-                            q.add(new int[]{ndy, ndx, count + 1});
-                            visited[ndy][ndx] = true;
-                        }
-                    }
-                }
-            }
-        }
+	}
 
-        return 0;
-    }
+	public static int bfs() {
+		Queue<int[]> q = new LinkedList<>();
+		q.add(new int[] {0, 0, 1});
+		visited[0][0] = true;
+
+		while (!q.isEmpty()) {
+			int[] temp = q.poll();
+			int y = temp[0];
+			int x = temp[1];
+			int step = temp[2];
+
+			if (y == N - 1 && x == M - 1) {
+				return step;
+			}
+
+			for (int i = 0; i < 4; i++) {
+				int ndy = y + dy[i];
+				int ndx = x + dx[i];
+
+				// 미로의 배열을 벗어나는지 확인
+				if (ndy < 0 || ndx < 0 || ndy >= N || ndx >= M)
+					continue;
+				// 이미 도착했는지
+				if (visited[ndy][ndx])
+					continue;
+				// 미로의 좌표가 0인지
+				if (miro[ndy][ndx] == '0')
+					continue;
+
+				visited[ndy][ndx] = true;
+				q.add(new int[] {ndy, ndx, step + 1});
+			}
+		}
+
+		return 0;
+	}
 }
