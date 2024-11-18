@@ -1,6 +1,6 @@
-import javax.xml.crypto.dsig.keyinfo.KeyInfo;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
 
@@ -8,7 +8,6 @@ public class Main {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
 		String[] sa = bf.readLine().split(" ");
-
 		int N = Integer.parseInt(sa[0]);
 		int M = Integer.parseInt(sa[1]);
 
@@ -18,29 +17,30 @@ public class Main {
 			arr[i] = Integer.parseInt(sa[i]);
 		}
 
-		int l = 0;
-		int r = 0;
-		int sum = arr[0];
 		int cnt = 0;
+		int s = 0;
+		int e = 0;
+		int sum = 0;
 
-		while (l != N && r != N) {
-			if (sum == M) {
-				cnt++;
-				sum -= arr[l];
-				l++;
+		while (e <= N) {
+			if (sum < M) {
+				if (e < N) {
+					sum += arr[e];
+					e++;
+				} else {
+					break;
+				}
 			} else if (sum > M) {
-				sum -= arr[l];
-				l++;
+				sum -= arr[s];
+				s++;
 			} else {
-                r++;
-                if(r != N){
-                    sum += arr[r];
-                }
+				cnt++;
+				sum -= arr[s];
+				s++;
 			}
 		}
 
 		System.out.println(cnt);
-
 	}
 
 }
