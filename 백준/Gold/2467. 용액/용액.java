@@ -1,45 +1,51 @@
-import com.sun.security.jgss.GSSUtil;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.util.*;
-import java.util.stream.IntStream;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String s = bf.readLine();
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(s);
-        String[] sa = bf.readLine().split(" ");
+		int N = Integer.parseInt(bf.readLine());
+		int[] arr = new int[N];
+		String[] sa = bf.readLine().split(" ");
+		for (int i = 0; i < N; i++) {
+			arr[i] = Integer.parseInt(sa[i]);
+		}
 
-        int[] arr = new int[N];
-        for(int i=0; i<N; i++){
-            arr[i] = Integer.parseInt(sa[i]);
-        }
+		int resultOne = 0;
+		int resultTwo = 0;
+		int resultSum = Integer.MAX_VALUE;
 
-        int answer = Integer.MAX_VALUE;
-        int left = 0;
-        int right = N-1;
-        int[] result = new int[2];
+		int l = 0;
+		int r = N - 1;
 
-        while(left < right){
-            int value = arr[left] + arr[right];
-            if(Math.abs(value) < answer){
-                answer = Math.abs(value);
-                result[0] = arr[left];
-                result[1] = arr[right];
-            }
+		while (l < r) {
+			int one = arr[l];
+			int two = arr[r];
+			int sum = one + two;
+			int absSum = Math.abs(sum);
 
-            if(value < 0) left++;
-            else if(value > 0) right--;
-            else if(value == 0) break;
-        }
+			if (resultSum > absSum) {
+				resultOne = one;
+				resultTwo = two;
+				resultSum = absSum;
+			}
 
-        System.out.println(result[0] + " " + result[1]);
-    }
+			if (sum > 0) {
+				r--;
+			} else {
+				l++;
+			}
+
+		}
+
+		int realResultOne = Math.min(resultOne, resultTwo);
+		int realResultTwo = Math.max(resultOne, resultTwo);
+
+		System.out.println(realResultOne + " " + realResultTwo);
+
+	}
+
 }
-
