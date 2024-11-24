@@ -1,38 +1,43 @@
-import com.sun.security.jgss.GSSUtil;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.util.*;
-import java.util.stream.IntStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String s = bf.readLine();
-        long G = Long.parseLong(s);
-        StringBuilder sb = new StringBuilder();
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        long left = 1;
-        long right = 2;
-        while(right < 100001){
-            long leftPow = left * left;
-            long rightPow = right * right;
-            if(rightPow - leftPow == G){
-                sb.append(right).append("\n");
-                right++;
-            }else if(rightPow - leftPow > G){
-                left++;
-            }else if(rightPow - leftPow < G){
-                right++;
-            }
-        }
+		int G = Integer.parseInt(bf.readLine());
 
-        if(sb.length() != 0) System.out.println(sb);
-        else System.out.println(-1);
+		List<Integer> list = new ArrayList<>();
 
-    }
+		int p1 = 1;
+		int p2 = 1;
+
+		while (p1 <= G && p2 <= G) {
+			int value = (p1 * p1) - (p2 * p2);
+
+			if (value == G) {
+				list.add(p1);
+				p1++;
+			} else if (value < G) {
+				p1++;
+			} else {
+				p2++;
+			}
+		}
+
+		StringBuilder sb = new StringBuilder();
+		if (list.isEmpty())
+			System.out.println(-1);
+		else {
+			for (int i = 0; i < list.size(); i++) {
+				sb.append(list.get(i)).append("\n");
+			}
+			System.out.println(sb);
+		}
+	}
+
 }
-
