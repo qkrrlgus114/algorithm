@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
 
@@ -11,10 +12,10 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(bf.readLine());
 
-        String[] sa = bf.readLine().split(" ");
-        R = Integer.parseInt(sa[0]);
-        C = Integer.parseInt(sa[1]);
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
 
         origin = new char[R][C];
         result = new char[R][C];
@@ -42,18 +43,10 @@ public class Main {
             for (int j = 0; j < C; j++) {
                 if (result[i][j] != 'X') continue;
 
-                if (startY > i) {
-                    startY = i;
-                }
-                if (startX > j) {
-                    startX = j;
-                }
-                if (endY < i) {
-                    endY = i;
-                }
-                if (endX < j) {
-                    endX = j;
-                }
+                startY = Math.min(startY, i);
+                startX = Math.min(startX, j);
+                endY = Math.max(endY, i);
+                endX = Math.max(endX, j);
             }
         }
 
