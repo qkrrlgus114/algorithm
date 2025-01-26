@@ -37,8 +37,11 @@ public class Main {
         } else if (aPoint < bPoint) {
             bWinTime += 2880 - bTeamSecond;
         }
-        System.out.println(changeMinuteAndSecond(aWinTime));
-        System.out.println(changeMinuteAndSecond(bWinTime));
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(changeMinuteAndSecond(aWinTime)).append("\n");
+        sb.append(changeMinuteAndSecond(bWinTime)).append("\n");
+        System.out.println(sb);
     }
 
     // 분:초 -> 초로 변환
