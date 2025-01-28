@@ -1,14 +1,16 @@
-# 물고기 종류 별 구분
-# 가장 큰 물고기 ID, 이름, 길이 출력
-# ID 오름차순
+# 물고기 종류 별로 가장 큰 물고기 ID, 물고기 이름, 길이
+# 물고기의 ID 오름차순
 
-select fi.id, fni.fish_name, fi.length
-from fish_info fi
-inner join fish_name_info fni
-on fi.fish_type = fni.fish_type
-where (fi.fish_type, fi.length) in(
-    select fish_type, max(length)
-    from fish_info
-    group by fish_type
-)
-
+SELECT FI.ID, FNI.FISH_NAME, FI.LENGTH
+FROM FISH_INFO FI
+INNER JOIN FISH_NAME_INFO FNI
+ON FI.FISH_TYPE = FNI.FISH_TYPE
+WHERE FI.ID IN (
+    SELECT ID
+    FROM FISH_INFO A1
+    WHERE LENGTH = (
+        SELECT MAX(LENGTH)
+        FROM FISH_INFO A2
+        WHERE A1.FISH_TYPE = A2.FISH_TYPE
+        GROUP BY FISH_TYPE))
+ORDER BY FI.ID
