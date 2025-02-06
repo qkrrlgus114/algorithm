@@ -21,13 +21,28 @@ public class Main {
         Arrays.sort(arr);
 
         int l = 0;
-        int r = N - 2;
-        long result = arr[N - 1];
-        K -= 1;
+        int lValue = 0;
+        int r = N - 1;
+        int rValue = 0;
+        long result = 0;
+        boolean rTurn = true;
 
-        while (K > 1) {
-            result += arr[r--] - arr[l++];
-            K -= 2;
+        while (K != 0) {
+            // 오른쪽 차례면
+            if (rTurn) {
+                rValue = arr[r];
+                // 차이를 계산하고
+                result += rValue - lValue;
+                // r, K를 둘 다 뺀다
+                r--;
+                K--;
+                // 왼쪽 턴으로 넘김
+                rTurn = false;
+            } else {
+                lValue = arr[l++];
+                K--;
+                rTurn = true;
+            }
         }
 
         System.out.println(result);
