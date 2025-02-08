@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Main {
 
@@ -19,16 +17,29 @@ public class Main {
 
             if (N == 0 && M == 0) break;
 
-            Set<Integer> set = new HashSet<>();
+            int[] sang = new int[N];
+            int[] sun = new int[M];
 
             for (int i = 0; i < N; i++) {
-                int num = Integer.parseInt(bf.readLine());
-                set.add(num);
+                sang[i] = Integer.parseInt(bf.readLine());
             }
 
             for (int j = 0; j < M; j++) {
-                int num = Integer.parseInt(bf.readLine());
-                if (set.contains(num)) cnt++;
+                sun[j] = Integer.parseInt(bf.readLine());
+            }
+
+            int sangL = 0;
+            int sunL = 0;
+            while (sangL < N && sunL < M) {
+                if (sang[sangL] == sun[sunL]) {
+                    cnt++;
+                    sangL++;
+                    sunL++;
+                } else if (sang[sangL] > sun[sunL]) {
+                    sunL++;
+                } else {
+                    sangL++;
+                }
             }
 
             sb.append(cnt).append("\n");
