@@ -6,38 +6,37 @@ import java.util.List;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-		int G = Integer.parseInt(bf.readLine());
+        int G = Integer.parseInt(bf.readLine());
 
-		List<Integer> list = new ArrayList<>();
+        // 현재 몸무게
+        int N = 1;
+        // 기억 몸무게
+        int M = 1;
+        // 가능한 몸무게를 저장할 리스트
+        List<Integer> list = new ArrayList<>();
+        while (N <= G || M <= G) {
+            if ((N * N) - (M * M) == G) {
+                list.add(N);
+                N++;
+                M++;
+            } else if ((N * N) - (M * M) < G) {
+                N++;
+            } else {
+                M++;
+            }
+        }
 
-		int p1 = 1;
-		int p2 = 1;
+        StringBuilder sb = new StringBuilder();
+        if (list.isEmpty()) {
+            sb.append("-1");
+        } else {
+            list.forEach(num -> sb.append(num).append("\n"));
+        }
 
-		while (p1 <= G && p2 <= G) {
-			int value = (p1 * p1) - (p2 * p2);
+        System.out.println(sb);
 
-			if (value == G) {
-				list.add(p1);
-				p1++;
-			} else if (value < G) {
-				p1++;
-			} else {
-				p2++;
-			}
-		}
-
-		StringBuilder sb = new StringBuilder();
-		if (list.isEmpty())
-			System.out.println(-1);
-		else {
-			for (int i = 0; i < list.size(); i++) {
-				sb.append(list.get(i)).append("\n");
-			}
-			System.out.println(sb);
-		}
-	}
-
+    }
 }
