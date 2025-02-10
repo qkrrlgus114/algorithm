@@ -4,48 +4,44 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-		int N = Integer.parseInt(bf.readLine());
-		int[] arr = new int[N];
-		String[] sa = bf.readLine().split(" ");
-		for (int i = 0; i < N; i++) {
-			arr[i] = Integer.parseInt(sa[i]);
-		}
+        int N = Integer.parseInt(bf.readLine());
 
-		int resultOne = 0;
-		int resultTwo = 0;
-		int resultSum = Integer.MAX_VALUE;
+        int[] arr = new int[N];
+        String[] sa = bf.readLine().split(" ");
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(sa[i]);
+        }
 
-		int l = 0;
-		int r = N - 1;
+        int result = Integer.MAX_VALUE;
 
-		while (l < r) {
-			int one = arr[l];
-			int two = arr[r];
-			int sum = one + two;
-			int absSum = Math.abs(sum);
+        int l = 0;
+        int r = N - 1;
+        int result1 = 0;
+        int result2 = 0;
 
-			if (resultSum > absSum) {
-				resultOne = one;
-				resultTwo = two;
-				resultSum = absSum;
-			}
+        while (l < r) {
+            int sum = arr[l] + arr[r];
 
-			if (sum > 0) {
-				r--;
-			} else {
-				l++;
-			}
+            // 0에 가까운지 체크
+            if (result > Math.abs(sum)) {
+                result1 = arr[l];
+                result2 = arr[r];
+                result = Math.abs(sum);
+            }
 
-		}
+            if (sum == 0) break;
 
-		int realResultOne = Math.min(resultOne, resultTwo);
-		int realResultTwo = Math.max(resultOne, resultTwo);
+            if (sum > 0) {
+                r--;
+            } else {
+                l++;
+            }
 
-		System.out.println(realResultOne + " " + realResultTwo);
+        }
 
-	}
-
+        System.out.println(result1 + " " + result2);
+    }
 }
