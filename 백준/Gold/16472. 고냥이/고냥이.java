@@ -1,43 +1,52 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
 
 public class Main {
-
-    static char[] alpha = new char[28];
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String s = bf.readLine();
-        int N = Integer.parseInt(s);
-        // 현재 알파벳의 개수
-        int count = 0;
-        int result = 0;
+        int N = Integer.parseInt(bf.readLine());
+        char[] catLanguage = bf.readLine().toCharArray();
 
-        String word = bf.readLine();
+        // 최대 길이
+        int answer = 0;
+        int[] alpha = new int[26];
 
-
-        int l = 0;
-        int r = 0;
-        while(r < word.length()){
-            alpha[word.charAt(r) - 97]++;
-            // 더했는데 개수가 1이면 새로운 문자
-            if(alpha[word.charAt(r) - 97] == 1) count++;
-            // 문자 종류 확인
-            if(count > N){
-                while(count > N){
-                    l++;
-                    alpha[word.charAt(l-1) - 97]--;
-                    if(alpha[word.charAt(l-1) - 97] == 0) break;
+        int s = 0;
+        int e = -1;
+        while (e < catLanguage.length - 1) {
+            e++;
+            // 이미 사용중인 알파벳의 종류라면
+            if (alpha[catLanguage[e] - 'a'] != 0) {
+                alpha[catLanguage[e] - 'a']++;
+                answer = Math.max(answer, e - s + 1);
+            } else {
+                if (N != 0) {
+                    N--;
+                    alpha[catLanguage[e] - 'a']++;
+                    answer = Math.max(answer, e - s + 1);
+                } else {
+                    while (true) {
+                        if (alpha[catLanguage[s] - 'a'] == 1) {
+                            alpha[catLanguage[s] - 'a']--;
+                            N++;
+                            s++;
+                            break;
+                        } else {
+                            alpha[catLanguage[s] - 'a']--;
+                            s++;
+                        }
+                    }
+                    N--;
+                    alpha[catLanguage[e] - 'a']++;
+                    answer = Math.max(answer, e - s + 1);
                 }
-                count--;
             }
-            result = Math.max(result, r - l + 1);
-            r++;
         }
 
-        System.out.println(result);
+        System.out.println(answer);
+
     }
 }
