@@ -1,13 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
 
 public class Main {
-
-    static int B_count;
-    static int W_count;
-    static int max_length;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -17,29 +12,37 @@ public class Main {
         int B = Integer.parseInt(sa[1]);
         int W = Integer.parseInt(sa[2]);
 
-        String road = bf.readLine();
+        int answer = 0;
 
-        B_count = 0;
-        W_count = 0;
-        max_length = 0;
-        int l = 0;
-        int r = 0;
+        char[] arr = bf.readLine().toCharArray();
 
-        while(r < N){
-            if(B_count > B){
-                if(road.charAt(l) == 'W') W_count--;
-                else B_count--;
-                l++;
-            }else{
-                if(road.charAt(r) == 'W') W_count++;
-                else B_count++;
-                r++;
+        int s = 0;
+        int e = -1;
+        int b = 0;
+        int w = 0;
+
+        while (e < N - 1) {
+            e++;
+            if (arr[e] == 'B') b++;
+            else w++;
+            // W개 이상, B개 이하라면
+            if (w >= W && b <= B) {
+                answer = Math.max(answer, e - s + 1);
             }
-            if(W_count >= W && B_count <= B){
-                max_length = Math.max(max_length, r - l);
+            // B개 초과라면 당겨줌
+            else if (b > B) {
+                while (b > B) {
+                    if (arr[s] == 'B') b--;
+                    else w--;
+                    s++;
+                }
+
+                if (w >= W && b <= B) {
+                    answer = Math.max(answer, e - s + 1);
+                }
             }
         }
 
-        System.out.println(max_length);
+        System.out.println(answer);
     }
 }
