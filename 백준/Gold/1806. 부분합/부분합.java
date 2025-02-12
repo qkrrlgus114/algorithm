@@ -1,48 +1,40 @@
-import javax.xml.crypto.dsig.keyinfo.KeyInfo;
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-		String[] sa = bf.readLine().split(" ");
+        String[] sa = bf.readLine().split(" ");
+        int N = Integer.parseInt(sa[0]);
+        int S = Integer.parseInt(sa[1]);
 
-		int N = Integer.parseInt(sa[0]);
-		int S = Integer.parseInt(sa[1]);
+        int[] arr = new int[N];
+        sa = bf.readLine().split(" ");
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(sa[i]);
+        }
 
-		int[] arr = new int[N];
-		sa = bf.readLine().split(" ");
-		for(int i=0; i<N; i++){
-			arr[i] = Integer.parseInt(sa[i]);
-		}
+        int answer = Integer.MAX_VALUE;
+        int s = 0;
+        int e = -1;
+        int sum = 0;
 
-		int result = Integer.MAX_VALUE;
-		int l = 0;
-		int r = 0;
-		long sum = 0;
+        while (e < N - 1) {
+            e++;
+            sum += arr[e];
+            if (sum >= S) {
+                answer = Math.min(answer, e - s + 1);
+                while (sum >= S) {
+                    answer = Math.min(answer, e - s + 1);
+                    sum -= arr[s];
+                    s++;
+                }
+            }
+        }
 
-		while(true){
-			if(sum >= S){
-				result = Math.min(result, r - l);
-				sum -= arr[l++];
-				if(l >= N) break;
-				continue;
-			}else{
-				if(r >= N) break;
-			}
-
-			if(N > r){
-				sum += arr[r++];
-			}
-
-		}
-
-		if(result == Integer.MAX_VALUE) System.out.println(0);
-		else System.out.println(result);
-
-	}
-
+        System.out.println(answer == Integer.MAX_VALUE ? 0 : answer);
+    }
 }
