@@ -1,50 +1,44 @@
-import javax.security.auth.login.AccountNotFoundException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
-    static int[][] arr;
+    static List<Node> list = new ArrayList<>();
+    static int X;
+    static int Y;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String s = bf.readLine();
-        int N = Integer.parseInt(s);
 
+        int N = Integer.parseInt(bf.readLine());
         String[] sa = bf.readLine().split(" ");
-        int A = Integer.parseInt(sa[0]);
-        int B = Integer.parseInt(sa[1]);
+        X = Integer.parseInt(sa[0]); // 가로
+        Y = Integer.parseInt(sa[1]); // 세로
 
-        arr = new int[N][2];
-        for(int i=0; i<N; i++){
+        list = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
             sa = bf.readLine().split(" ");
-            arr[i][0] = Integer.parseInt(sa[0]);
-            arr[i][1] = Integer.parseInt(sa[1]);
+            list.add(new Node(Integer.parseInt(sa[0]), Integer.parseInt(sa[1])));
         }
 
-        Arrays.sort(arr, new Comparator<int[]>(){
-            public int compare(int[] o1, int[] o2){
-                if(o1[1] == o2[1]){
-                    return o1[0] - o2[0];
-                }
-                return o1[1] - o2[1];
+        list.sort((o1, o2) -> {
+            if (o1.x == o2.x) {
+                return o1.y - o2.y;
             }
+            return o1.x - o2.x;
         });
 
-        // 정답 개수
         int answer = 0;
 
-        for(int i=0; i<N; i++){
-            int[] target = arr[i];
-            if(search(0, N-1, target[0], target[1] + B)
-            && search(0, N-1, target[0] + A, target[1])
-            && search(0, N-1, target[0] + A, target[1] + B)){
+        for (int i = 0; i < N; i++) {
+            // 3개의 경우를 전부 확인해야함. 즉 3번의 이분탐색 진행
+            Node node = list.get(i);
+            if (binarySearch(i, N - 1, node.x + X, node.y) &&
+                    binarySearch(i, N - 1, node.x, node.y + Y) &&
+                    binarySearch(i, N - 1, node.x + X, node.y + Y)) {
                 answer++;
             }
         }
@@ -52,24 +46,36 @@ public class Main {
         System.out.println(answer);
     }
 
-    public static boolean search(int start, int end, int y, int x){
-        if(start > end) return false;
+    public static boolean binarySearch(int s, int e, int x, int y) {
+        if (s > e) return false;
+        int m = (s + e) / 2;
 
-        int mid = (start + end) / 2;
-        int[] target = arr[mid];
+        int checkY = list.get(m).y;
+        int checkX = list.get(m).x;
 
-        if(target[0] == y && target[1] == x) return true;
-        else if(target[1] > x){
-            return search(start, mid - 1, y, x);
-        }else if(target[1] < x){
-            return search(mid + 1, end, y, x);
-        }else if(target[0] > y){
-            return search(start, mid - 1, y, x);
-        }else if(target[0] < y){
-            return search(mid + 1, end, y, x);
+        if (checkX < x) {
+            return binarySearch(m + 1, e, x, y);
+        } else if (checkX > x) {
+            return binarySearch(s, m - 1, x, y);
+        } else {
+            if (checkY < y) {
+                return binarySearch(m + 1, e, x, y);
+            } else if (checkY > y) {
+                return binarySearch(s, m - 1, x, y);
+            } else {
+                return true;
+            }
         }
-
-        return false;
     }
+
 }
 
+class Node {
+    int x;
+    int y;
+
+    public Node(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
