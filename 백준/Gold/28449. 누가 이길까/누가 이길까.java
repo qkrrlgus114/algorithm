@@ -1,80 +1,86 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
-
+import java.util.Arrays;
 
 public class Main {
 
+    static int N, M;
+    static int[] hi;
+    static int[] arc;
+
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
         String[] sa = bf.readLine().split(" ");
-        int N = Integer.parseInt(sa[0]);
-        int M = Integer.parseInt(sa[1]);
-
-        int[] a = new int[N];
-        int[] b = new int[M];
+        N = Integer.parseInt(sa[0]);
+        M = Integer.parseInt(sa[1]);
 
         sa = bf.readLine().split(" ");
-        for(int i=0; i<N; i++){
-            a[i] = Integer.parseInt(sa[i]);
+
+        hi = new int[N];
+        arc = new int[M];
+        for (int i = 0; i < N; i++) {
+            hi[i] = Integer.parseInt(sa[i]);
         }
+        Arrays.sort(hi);
 
         sa = bf.readLine().split(" ");
-        for(int i=0; i<M; i++){
-            b[i] = Integer.parseInt(sa[i]);
+        for (int i = 0; i < M; i++) {
+            arc[i] = Integer.parseInt(sa[i]);
         }
+        Arrays.sort(arc);
 
-        Arrays.sort(a);
-        Arrays.sort(b);
-
-        long aWin = 0;
-        long bWin = 0;
+        long hiWin = 0;
+        long arcWin = 0;
         long draw = 0;
 
-        for(int i = 0; i < N; i++){
-            int start = lowerBound(b, a[i]);
-            int end = upperBound(b, a[i]);
-
-            aWin += start;
-            bWin += b.length - end;
-            draw += end - start;
+        for (int i = 0; i < N; i++) {
+            int target = hi[i];
+            int lowerBound = lowerBound(0, M - 1, target);
+            int upperBound = upperBound(0, M - 1, target);
+            hiWin += lowerBound;
+            draw += upperBound - lowerBound;
+            arcWin += M - upperBound;
         }
 
-        System.out.println(aWin + " " + bWin + " " + draw);
+        System.out.println(hiWin + " " + arcWin + " " + draw);
     }
 
-    public static int lowerBound(int[] b, int target){
-        int l = 0;
-        int r = b.length - 1;
 
-        while(l <= r){
-            int mid = (l + r) / 2;
+    // target이 처음 등장하는 시점 (value가 해당 인덱스를 의미)
+    public static int lowerBound(int s, int e, int target) {
+        int value = arc.length;
 
-            if(b[mid] < target){
-                l = mid + 1;
-            }else{
-                r = mid - 1;
+        while (s <= e) {
+            int m = (s + e) / 2;
+            if (arc[m] >= target) {
+                value = m;
+                e = m - 1;
+            } else {
+                s = m + 1;
             }
         }
-        return l;
+
+        return value;
     }
 
-    public static int upperBound(int[] b, int target){
-        int l = 0;
-        int r = b.length - 1;
+    // target 초과가 처음 등장하는 시점 (value가 해당 인덱스를 의미)
+    public static int upperBound(int s, int e, int target) {
+        int value = arc.length;
 
-        while(l <= r){
-            int mid = (l + r) / 2;
-            if(b[mid] <= target){
-                l = mid + 1;
-            }else{
-                r = mid - 1;
+        while (s <= e) {
+            int m = (s + e) / 2;
+            if (arc[m] > target) {
+                value = m;
+                e = m - 1;
+            } else {
+                s = m + 1;
             }
         }
-        return l;
+
+        return value;
     }
 
 
 }
-
