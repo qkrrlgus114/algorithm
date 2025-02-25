@@ -29,43 +29,48 @@ public class Main {
             }
             Arrays.sort(B);
 
-            int[] c = new int[n];
-            for (int j = 0; j < n; j++) {
-                int number = A[j];
+            long sum = 0;
 
-                boolean check = false;
-                int start = 0;
-                int end = m - 1;
-                while (start + 1 < end) {
-                    int mid = (start + end) / 2;
+            for (int i = 0; i < n; i++) {
 
-                    if (number == B[mid]) {
-                        check = true;
-                        c[j] = number;
+                int s = 0;
+                int e = m - 1;
+                // 차이
+                int diff = Integer.MAX_VALUE;
+                // C[i]에 들어갈 값
+                int result = Integer.MAX_VALUE;
+
+                while (s <= e) {
+                    int mid = (s + e) / 2;
+
+                    int value = B[mid];
+
+                    if (Math.abs(value - A[i]) == 0) {
+                        result = value;
                         break;
-                    } else if (number > B[mid]) {
-                        start = mid;
-                    } else if (number < B[mid]) {
-                        end = mid;
+                    } else {
+                        if (diff >= Math.abs(value - A[i])) {
+                            if (diff == Math.abs(value - A[i])) {
+                                diff = Math.abs(value - A[i]);
+                                result = Math.min(result, value);
+                            } else {
+                                diff = Math.abs(value - A[i]);
+                                result = value;
+                            }
+
+                        }
+
+                        if (A[i] > value) {
+                            s = mid + 1;
+                        } else {
+                            e = mid - 1;
+                        }
                     }
                 }
-                if (!check) {
-                    if (Math.abs(number - B[start]) == Math.abs(number - B[end])) {
-                        c[j] = B[start];
-                    } else if (Math.abs(number - B[start]) < Math.abs(number - B[end])) {
-                        c[j] = B[start];
-                    } else if (Math.abs(number - B[start]) > Math.abs(number - B[end])) {
-                        c[j] = B[end];
-                    }
-                }
+                
+                sum += result;
             }
-
-            long result = 0;
-            for (int j = 0; j < c.length; j++) {
-                result += c[j];
-            }
-
-            sb.append(result).append("\n");
+            sb.append(sum).append("\n");
         }
 
         System.out.println(sb);
