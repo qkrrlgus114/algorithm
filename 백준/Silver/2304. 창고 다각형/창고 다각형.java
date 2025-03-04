@@ -1,46 +1,78 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            int N = Integer.parseInt(in.readLine());
-            StringTokenizer st;
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-            int[][] col = new int[N][2];
-            for (int i = 0; i < N; i++) {
-                st = new StringTokenizer(in.readLine());
-                col[i][0] = Integer.parseInt(st.nextToken());//위치
-                col[i][1] = Integer.parseInt(st.nextToken());//높이
-            }
+        int N = Integer.parseInt(bf.readLine());
 
-            Arrays.sort(col, (o1, o2) -> o1[0] - o2[0]);
+        List<Block> list = new ArrayList<>();
 
-            int area = 0;
-            for(int i=0;i<N;){
-                int j=i+1; int max = j;
-                while(j<N && col[i][1]>col[j][1]){
-                    if(col[max][1]<col[j++][1]) max = j-1;
-                }
-
-                if(j>=N){
-                    area+=col[i][1];
-                    if(max<N) area+=col[max][1]*(col[max][0]-col[i][0]-1);
-                    i=max;
-                }else{
-                    area+= col[i][1]*(col[j][0]-col[i][0]);
-                    i=j;
-                }
-
-            }
-            System.out.println(area);
+        for (int i = 0; i < N; i++) {
+            String[] sa = bf.readLine().split(" ");
+            list.add(new Block(Integer.parseInt(sa[0]), Integer.parseInt(sa[1])));
         }
 
+        Collections.sort(list, (o1, o2) -> {
+            if (o1.height == o2.height) {
+                return o1.index - o2.index;
+            }
 
+            return o1.index - o2.index;
+        });
 
+        int answer = 0;
 
+        int maxHeight = 0;
+        int maxIndex = 0;
+        for (int i = 0; i < N; i++) {
+            if (maxHeight < list.get(i).height) {
+                maxHeight = list.get(i).height;
+                maxIndex = i;
+            }
+        }
+
+        // 왼쪽 계산
+        int leftHeight = list.get(0).height;
+        int leftIndex = 0;
+        for (int i = 0; i <= maxIndex; i++) {
+            if (list.get(i).height >= leftHeight) {
+                answer += (list.get(i).index - list.get(leftIndex).index) * leftHeight;
+                leftHeight = list.get(i).height;
+                leftIndex = i;
+            }
+        }
+        
+        // 오른쪽 계산
+        int rightHeight = list.get(N - 1).height;
+        int rightIndex = N - 1;
+        for (int i = N - 1; i >= maxIndex; i--) {
+            if (list.get(i).height >= rightHeight) {
+                answer += (list.get(rightIndex).index - list.get(i).index) * rightHeight;
+                rightHeight = list.get(i).height;
+                rightIndex = i;
+            }
+        }
+
+        System.out.println(answer + maxHeight);
 
     }
+
+}
+
+class Block {
+    int index;
+    int height;
+
+    public Block(int index, int height) {
+        this.index = index;
+        this.height = height;
+    }
+}
+
