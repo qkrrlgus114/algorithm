@@ -30,11 +30,7 @@ public class Main {
             double rightL = arr[i - 1] + L;
 
             if (leftL < center && rightL > center) {
-                // 밑에 상자가 범위를 벗어나는지 확인
-                if (arr[i - 1] - L >= arr[i] + L || arr[i - 1] + L <= arr[i] - L) {
-                    status = false;
-                    break;
-                }
+                continue;
             } else {
                 status = false;
                 break;
