@@ -3,49 +3,51 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-
 public class Main {
-    static int[] arr;
-    static int[] result;
-    static boolean[] visited;
-    static int N;
-    static int M;
+
+    static int N, M;
+    static boolean[] visited = new boolean[10001];
     static StringBuilder sb = new StringBuilder();
+    static int[] answer;
+    static int[] arr;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String[] s = bf.readLine().split(" ");
-        N = Integer.parseInt(s[0]);
-        M = Integer.parseInt(s[1]);
 
+        String[] sa = bf.readLine().split(" ");
+
+        N = Integer.parseInt(sa[0]);
+        M = Integer.parseInt(sa[1]);
+
+        answer = new int[M];
         arr = new int[N];
-        result = new int[M];
-        visited = new boolean[N];
-        s = bf.readLine().split(" ");
+
+        sa = bf.readLine().split(" ");
         for (int i = 0; i < N; i++) {
-            arr[i] = Integer.parseInt(s[i]);
+            arr[i] = Integer.parseInt(sa[i]);
         }
         Arrays.sort(arr);
-        back(0, 0);
-        System.out.println(sb.toString());
+
+        recur(0, 0);
+
+        System.out.println(sb);
     }
 
-    public static void back(int depth, int count) {
-        if (count == M) {
-            for (Integer i : result) {
-                sb.append(i + " ");
+    public static void recur(int depth, int num) {
+        if (depth == M) {
+            for (int i = 0; i < M; i++) {
+                sb.append(answer[i]).append(" ");
             }
             sb.append("\n");
             return;
         }
 
-        for (int i = depth; i < N; i++) {
-            if(!visited[i]){
-                visited[i] = true;
-                result[count] = arr[i];
-                back(i, count + 1);
-                visited[i] = false;
-            }
+        for (int i = num; i < N; i++) {
+            if (visited[arr[i]]) continue;
+            visited[arr[i]] = true;
+            answer[depth] = arr[i];
+            recur(depth + 1, i + 1);
+            visited[arr[i]] = false;
         }
     }
 }
