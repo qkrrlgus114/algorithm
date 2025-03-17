@@ -2,8 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Main {
 
@@ -12,7 +10,6 @@ public class Main {
     static StringBuilder sb = new StringBuilder();
     static int[] answer;
     static int[] arr;
-    static Set<String> set = new HashSet<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -39,12 +36,6 @@ public class Main {
 
     public static void recur(int depth) {
         if (depth == M) {
-            String value = "";
-            for (int i = 0; i < M; i++) {
-                value += answer[i] + " ";
-            }
-            if (set.contains(value)) return;
-            set.add(value);
             for (int i = 0; i < M; i++) {
                 sb.append(answer[i]).append(" ");
             }
@@ -52,8 +43,10 @@ public class Main {
             return;
         }
 
+        int before = -1;
         for (int i = 0; i < N; i++) {
-            if (visited[i]) continue;
+            if (visited[i] || before == arr[i]) continue;
+            before = arr[i];
             visited[i] = true;
             answer[depth] = arr[i];
             recur(depth + 1);
