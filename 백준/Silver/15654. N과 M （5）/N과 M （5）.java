@@ -1,60 +1,53 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Arrays;
 
 public class Main {
 
-    static StringBuilder sb;
-    static int N;
-    static int M;
-    static boolean[] visited;
+    static int N, M;
+    static boolean[] visited = new boolean[10001];
+    static StringBuilder sb = new StringBuilder();
+    static int[] answer;
     static int[] arr;
-    static int[] choice;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
         String[] sa = bf.readLine().split(" ");
+
         N = Integer.parseInt(sa[0]);
         M = Integer.parseInt(sa[1]);
 
+        answer = new int[M];
         arr = new int[N];
-        visited = new boolean[N];
-        choice = new int[M];
 
         sa = bf.readLine().split(" ");
-
-        for(int i=0; i<N; i++){
+        for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(sa[i]);
         }
         Arrays.sort(arr);
 
-        sb = new StringBuilder();
-
-        dfs(0);
+        recur(0);
 
         System.out.println(sb);
     }
 
-    public static void dfs(int depth){
-        // 종료 조건
-        if(depth == M){
-            for(int i=0; i<M; i++){
-                sb.append(choice[i]).append(" ");
+    public static void recur(int depth) {
+        if (depth == M) {
+            for (int i = 0; i < M; i++) {
+                sb.append(answer[i]).append(" ");
             }
             sb.append("\n");
             return;
         }
 
-        for(int i=0; i<N; i++){
-            if(visited[i]) continue;
-            visited[i] = true;
-            choice[depth] = arr[i];
-            dfs(depth + 1);
-            visited[i] = false;
+        for (int i = 0; i < N; i++) {
+            if (visited[arr[i]]) continue;
+            visited[arr[i]] = true;
+            answer[depth] = arr[i];
+            recur(depth + 1);
+            visited[arr[i]] = false;
         }
     }
-
 }
