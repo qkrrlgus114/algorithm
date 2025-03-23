@@ -5,67 +5,63 @@ import java.io.InputStreamReader;
 public class Main {
 
     static int N;
-    static int[][] chess_board;
-    static int result = 0;
+    static int[][] board;
+    static long answer;
+    // 열에 놨는지 체크
+    static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String s = bf.readLine();
-        N = Integer.parseInt(s);
+        N = Integer.parseInt(bf.readLine());
+        board = new int[N][N];
+        visited = new boolean[N];
 
-        chess_board = new int[N][N];
+        permutation(0);
 
-        dfs(0);
-
-        System.out.println(result);
+        System.out.println(answer);
     }
 
-    public static void dfs(int queen){
-        // 종료
-        if(queen == N){
-            result++;
+    public static void permutation(int queen) {
+        if (queen == N) {
+            answer++;
             return;
         }
 
-        // 재귀
-        for(int i=0; i<N; i++){
-            if(chess_board[queen][i] == 0 && checkQueen(queen, i)){
-                chess_board[queen][i] = 1;
-                dfs(queen + 1);
-                chess_board[queen][i] = 0;
+        for (int j = 0; j < N; j++) {
+            if (visited[j]) continue;
+            if (checkQueen(queen, j)) {
+                visited[j] = true;
+                board[queen][j] = 1;
+                permutation(queen + 1);
+                visited[j] = false;
+                board[queen][j] = 0;
             }
         }
-
     }
 
-    public static boolean checkQueen(int y, int x){
-        // 위, 왼쪽위, 오른쪽위 확인
-        int i = y;
-        int j = x;
-        // 1. 위 확인
-        while(i >= 0){
-            if(chess_board[i][j] != 0) return false;
-            i--;
+    public static boolean checkQueen(int row, int col) {
+        int oriRow = row;
+        int oriCol = col;
+
+        // 왼쪽 대각선 위 확인
+        while (row - 1 >= 0 && col - 1 >= 0) {
+            row -= 1;
+            col -= 1;
+            if (board[row][col] == 1) return false;
         }
 
-        i = y;
-        j = x;
-        // 2. 왼쪽 위 확인
-        while(i >= 0 && j >= 0){
-            if(chess_board[i][j] != 0) return false;
-            i--;
-            j--;
+        row = oriRow;
+        col = oriCol;
+        // 오른쪽 대각선 위 확인
+        while (row - 1 >= 0 && col + 1 < N) {
+            row -= 1;
+            col += 1;
+            if (board[row][col] == 1) return false;
         }
 
-        i = y;
-        j = x;
-        // 3. 오른쪽 위 확인
-        while(i >= 0 && j < N){
-            if(chess_board[i][j] != 0) return false;
-            i--;
-            j++;
-        }
         return true;
     }
+
+
 }
