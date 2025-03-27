@@ -1,32 +1,28 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
 
 public class Main {
 
-    // 남규사탕 > 영훈사탕 + 2
-    // 사탕 0개 안됨
-    // 택희 홀수 안됨
+    /**
+     * 1. 남는 사탕 없어야 한다.
+     * 2. 남규 >= 영훈 + 2
+     * 3. 사탕 0개 X
+     * 4. 택희 % 2 == 0
+     */
+
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
+        int N = Integer.parseInt(bf.readLine());
+
         int answer = 0;
 
-        String s = bf.readLine();
-        int N = Integer.parseInt(s);
-
-        for(int i=0; i<=N; i++){
-            for(int j=0; j<=N; j++){
-                for(int k=0; k<=N; k++){
-                    if(i + j + k == N){
-                        // 아무도 0개는 없어야한다.
-                        if(i == 0 || j == 0 || k == 0) continue;
-                        // 택히는 홀수면 안 된다
-                        if(k % 2 != 0) continue;
-                        // 남규는 영훈이보다 2개 이상 많아야한다.
-                        if(i - j - 2 < 0) continue;
-                        answer++;
-                    }else continue;
+        // i = 택희, j = 영훈, k = 남규
+        for (int i = 1; i <= N; i++) {
+            for (int j = 1; j <= N; j++) {
+                for (int k = 1; k <= N; k++) {
+                    if (N == i + j + k && k >= j + 2 && i % 2 == 0) answer++;
                 }
             }
         }
