@@ -1,31 +1,41 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
 
 public class Main {
 
+    /**
+     *
+     */
+
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
         String[] sa = bf.readLine().split(" ");
         int[] arr = new int[5];
-        for(int i=0; i<5; i++){
+        for (int i = 0; i < 5; i++) {
             arr[i] = Integer.parseInt(sa[i]);
         }
 
-        int answer = 1;
+        int answer = Integer.MAX_VALUE;
 
-        while(true){
-            int count = 0;
-            for(int i=0; i<5; i++){
-                if(answer % arr[i] == 0) count++;
+        for (int i = 0; i < 5; i++) {
+            int value = arr[i];
+            while (true) {
+                int sum = 0;
+                if (value % arr[0] == 0) sum++;
+                if (value % arr[1] == 0) sum++;
+                if (value % arr[2] == 0) sum++;
+                if (value % arr[3] == 0) sum++;
+                if (value % arr[4] == 0) sum++;
+                if (sum >= 3) {
+                    answer = Math.min(answer, value);
+                    break;
+                }
+                value += arr[i];
             }
-
-            if(count >= 3){
-                System.out.println(answer);
-                return;
-            }
-            answer++;
         }
+
+        System.out.println(answer);
     }
 }
