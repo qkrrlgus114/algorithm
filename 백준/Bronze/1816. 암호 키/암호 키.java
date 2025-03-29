@@ -1,40 +1,51 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Arrays;
 
 public class Main {
 
-    static boolean[] isPrime = new boolean[1000001];
+    static boolean[] prime = new boolean[1000001];
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        getPrime();
-        String s = bf.readLine();
-        int N = Integer.parseInt(s);
-        for(int t=0; t<N; t++){
-            s = bf.readLine();
-            long num = Long.parseLong(s);
-            boolean check = true;
-            for(int i=2; i<isPrime.length; i++){
-                if(isPrime[i] && num % i == 0){
-                    check = false;
+
+        primeCalculator();
+
+        int N = Integer.parseInt(bf.readLine());
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < N; i++) {
+            long S = Long.parseLong(bf.readLine());
+            boolean status = true;
+
+            for (int j = 2; j <= 1000000; j++) {
+                if (!prime[j]) continue;
+                if (S % j == 0) {
+                    status = false;
                     break;
                 }
             }
-            System.out.println(check ? "YES" : "NO");
+
+            if (status) sb.append("YES").append("\n");
+            else sb.append("NO").append("\n");
         }
+
+        System.out.println(sb);
+
     }
 
-    public static void getPrime(){
-        Arrays.fill(isPrime, true);
-        isPrime[0] = isPrime[1] = false;
-        for(int i=2; i<Math.sqrt(1000001); i++){
-            if(isPrime[i]){
-                for(int j=i*i; j<1000001; j+=i){
-                    isPrime[j] = false;
+    public static void primeCalculator() {
+        Arrays.fill(prime, true);
+        prime[0] = prime[1] = false;
+
+        for (int i = 2; i <= 1000000; i++) {
+            if (prime[i]) {
+                for (int j = i + i; j <= 1000000; j += i) {
+                    prime[j] = false;
                 }
             }
         }
     }
+
 }
