@@ -1,53 +1,108 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
+    /**
+     * 1. 같은 자리에 있고 일치하면 스트라이크
+     * 2. 다른 자리에 있고 일치하면 볼
+     */
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String s = bf.readLine();
-        int N = Integer.parseInt(s);
-
-        int[][] arr = new int[N][3];
-        for(int i=0; i<N; i++){
+        int N = Integer.parseInt(bf.readLine());
+        List<Min> minList = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
             String[] sa = bf.readLine().split(" ");
-            arr[i][0] = Integer.parseInt(sa[0]);
-            arr[i][1] = Integer.parseInt(sa[1]);
-            arr[i][2] = Integer.parseInt(sa[2]);
+            minList.add(new Min(sa[0], Integer.parseInt(sa[1]), Integer.parseInt(sa[2])));
         }
 
-        int result = 0;
+        int answer = 0;
 
-        for(int i=1; i<=9; i++){
-            for(int j=1; j<=9; j++){
-                for(int k=1; k<=9; k++){
-                    if(i==j || j==k || i==k) continue;
-                    boolean check = true;
-                    for(int q=0; q<N; q++){
-                        int qx = arr[q][0] / 100;
-                        int qy = (arr[q][0] % 100) / 10;
-                        int qz = arr[q][0] % 10;
-                        int strike = 0, ball = 0;
-                        if(i == qx) strike++;
-                        else if(i == qy || i == qz) ball++;
-                        if(j == qy) strike++;
-                        else if(j == qx || j == qz) ball++;
-                        if(k == qz) strike++;
-                        else if(k == qx || k == qy) ball++;
-                        if(strike != arr[q][1] || ball != arr[q][2]){
-                            check = false;
+        for (int i = 1; i <= 9; i++) {
+            for (int j = 1; j <= 9; j++) {
+                for (int k = 1; k <= 9; k++) {
+                    if (i == j || j == k || i == k) continue;
+                    char[] young = new char[3];
+                    young[0] = (char) (i + '0');
+                    young[1] = (char) (j + '0');
+                    young[2] = (char) (k + '0');
+                    boolean status = true; // 정답이 되는지 여부
+
+                    for (int q = 0; q < N; q++) {
+                        Min min = minList.get(q);
+                        char[] minNumber = min.number.toCharArray();
+                        boolean[] check = new boolean[3]; // 이미 판단을 진행한 곳인지 확인
+                        int strike = 0;
+                        int ball = 0;
+
+                        // 스트라이크 확인
+                        if (young[0] == minNumber[0]) {
+                            check[0] = true;
+                            strike++;
+                        }
+                        if (young[1] == minNumber[1]) {
+                            check[1] = true;
+                            strike++;
+                        }
+                        if (young[2] == minNumber[2]) {
+                            check[2] = true;
+                            strike++;
+                        }
+
+                        // 볼 확인
+                        if (young[0] == minNumber[1] && !check[0]) {
+                            check[0] = true;
+                            ball++;
+                        }
+                        if (young[0] == minNumber[2] && !check[0]) {
+                            check[0] = true;
+                            ball++;
+                        }
+                        if (young[1] == minNumber[0] && !check[1]) {
+                            check[1] = true;
+                            ball++;
+                        }
+                        if (young[1] == minNumber[2] && !check[1]) {
+                            check[1] = true;
+                            ball++;
+                        }
+                        if (young[2] == minNumber[0] && !check[2]) {
+                            check[2] = true;
+                            ball++;
+                        }
+                        if (young[2] == minNumber[1] && !check[2]) {
+                            check[2] = true;
+                            ball++;
+                        }
+
+                        if (min.ball != ball || min.strike != strike) {
+                            status = false;
                             break;
                         }
                     }
-                    if(check) result++;
+
+                    if (status) {
+                        answer++;
+                    }
                 }
             }
         }
+        System.out.println(answer);
+    }
+}
 
-        System.out.println(result);
+class Min {
+    String number;
+    int strike;
+    int ball;
 
+    public Min(String number, int strike, int ball) {
+        this.number = number;
+        this.strike = strike;
+        this.ball = ball;
     }
 }
