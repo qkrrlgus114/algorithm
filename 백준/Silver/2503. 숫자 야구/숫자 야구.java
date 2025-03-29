@@ -35,49 +35,18 @@ public class Main {
                     for (int q = 0; q < N; q++) {
                         Min min = minList.get(q);
                         char[] minNumber = min.number.toCharArray();
-                        boolean[] check = new boolean[3]; // 이미 판단을 진행한 곳인지 확인
                         int strike = 0;
                         int ball = 0;
 
                         // 스트라이크 확인
-                        if (young[0] == minNumber[0]) {
-                            check[0] = true;
-                            strike++;
-                        }
-                        if (young[1] == minNumber[1]) {
-                            check[1] = true;
-                            strike++;
-                        }
-                        if (young[2] == minNumber[2]) {
-                            check[2] = true;
-                            strike++;
-                        }
+                        if (young[0] == minNumber[0]) strike++;
+                        if (young[1] == minNumber[1]) strike++;
+                        if (young[2] == minNumber[2]) strike++;
 
                         // 볼 확인
-                        if (young[0] == minNumber[1] && !check[0]) {
-                            check[0] = true;
-                            ball++;
-                        }
-                        if (young[0] == minNumber[2] && !check[0]) {
-                            check[0] = true;
-                            ball++;
-                        }
-                        if (young[1] == minNumber[0] && !check[1]) {
-                            check[1] = true;
-                            ball++;
-                        }
-                        if (young[1] == minNumber[2] && !check[1]) {
-                            check[1] = true;
-                            ball++;
-                        }
-                        if (young[2] == minNumber[0] && !check[2]) {
-                            check[2] = true;
-                            ball++;
-                        }
-                        if (young[2] == minNumber[1] && !check[2]) {
-                            check[2] = true;
-                            ball++;
-                        }
+                        if (young[0] == minNumber[1] || young[0] == minNumber[2]) ball++;
+                        if (young[1] == minNumber[0] || young[1] == minNumber[2]) ball++;
+                        if (young[2] == minNumber[0] || young[2] == minNumber[1]) ball++;
 
                         if (min.ball != ball || min.strike != strike) {
                             status = false;
