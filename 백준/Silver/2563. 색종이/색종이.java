@@ -1,39 +1,35 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-
 
 public class Main {
 
-
-
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String n = bf.readLine();
-        int N = Integer.parseInt(n);
 
-        int[][] map = new int[100][100];
+        int[][] board = new int[101][101];
 
-        for(int t=0; t<N; t++){
-            String[] s = bf.readLine().split(" ");
-            int y = Integer.parseInt(s[0]);
-            int x = Integer.parseInt(s[1]);
+        int N = Integer.parseInt(bf.readLine());
+        for (int t = 0; t < N; t++) {
+            String[] sa = bf.readLine().split(" ");
+            int x = Integer.parseInt(sa[0]);
+            int y = Integer.parseInt(sa[1]);
 
-            for(int i=100-x; i>100-(x+10); i--){
-                for(int j=y; j<10+y; j++){
-                    map[i][j] = 1;
+            for (int i = y; i < y + 10; i++) {
+                for (int j = x; j < x + 10; j++) {
+                    board[i][j] = 1;
                 }
             }
         }
-        int count = 0;
-        for(int i=0; i<100; i++){
-            for(int j=0; j<100; j++){
-                if(map[i][j] == 1) count++;
+
+        int answer = 0;
+        for (int i = 0; i < 101; i++) {
+            for (int j = 0; j < 101; j++) {
+                if (board[i][j] == 1) answer++;
             }
         }
 
-        System.out.println(count);
+        System.out.println(answer);
     }
 
 }
