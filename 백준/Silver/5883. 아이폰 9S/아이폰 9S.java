@@ -1,50 +1,41 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Main{
+public class Main {
 
-    public static void main (String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String s = bf.readLine();
-        int N = Integer.parseInt(s);
-        List<Integer> arr = new ArrayList<>();
 
-        int[] waiting = new int[N];
-        for(int i=0; i<N; i++){
-            s = bf.readLine();
-            waiting[i] = Integer.parseInt(s);
-            if(!arr.contains(waiting[i])) arr.add(waiting[i]);
+        int N = Integer.parseInt(bf.readLine());
+        int[] arr = new int[N]; // 사람들이 원하는 용량
+        List<Integer> list = new ArrayList<>(); // 용량을 중복 없이 저장
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(bf.readLine());
+            if (!list.contains(arr[i])) list.add(arr[i]);
         }
 
-        // 최대 인원 수
-        int answer = Integer.MIN_VALUE;
-        for(int i=0; i<arr.size(); i++){
-            int find = arr.get(i); // 빼려는 사람
-            int count = 0; // 현재까지 연속된 인원
-            int countNum = 0; // 현재 사람의 번호
-            for(int j=0; j<waiting.length; j++){
-                if(find == waiting[j]){
-                    continue;
-                }else{
-                    if(countNum == 0){
-                        count++;
-                        countNum = waiting[j];
-                    }else if(countNum == waiting[j]){
-                        count++;
-                    }else if(countNum != waiting[j]){
-                        answer = Math.max(answer, count);
-                        count = 1;
-                        countNum = waiting[j];
-                    }
+        int answer = 0;
+        for (Integer want : list) {
+            int length = 0; // 현재까지 누적 길이
+            int value = 0; // 현재 고른 용량
+            for (int i = 0; i < N; i++) {
+                if (arr[i] == want) continue;
+                if (value != arr[i]) {
+                    answer = Math.max(answer, length);
+                    length = 1;
+                    value = arr[i];
+                } else {
+                    length++;
                 }
             }
-            answer = Math.max(answer, count);
+            answer = Math.max(answer, length);
         }
 
         System.out.println(answer);
+
 
     }
 }
