@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Main {
 
@@ -21,6 +19,7 @@ public class Main {
     static List<String> answerList = new ArrayList<>();
     static String pointStr;
     static String seedStr;
+    static Map<Character, int[]> nodeList;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -30,16 +29,20 @@ public class Main {
 
         int T = Integer.parseInt(bf.readLine());
         for (int t = 0; t < T; t++) {
+            nodeList = new HashMap<>();
             boolean[][] visited = new boolean[3][3];
             pointStr = "";
             seedStr = bf.readLine();
             for (int i = 0; i < 3; i++) {
-                board[i] = bf.readLine().toCharArray();
+                char[] array = bf.readLine().toCharArray();
+                for (int j = 0; j < 3; j++) {
+                    board[i][j] = array[j];
+                    nodeList.put(board[i][j], new int[]{i, j});
+                }
             }
 
             // 먼저 시드 문자열의 점수 문자열을 구한다.
             getPointStr(0, new StringBuilder(), visited);
-            visited = new boolean[3][3];
 
             combination(0, new StringBuilder(), new StringBuilder(), visited);
             Collections.sort(answerList);
@@ -58,17 +61,11 @@ public class Main {
             return;
         }
 
-        char target = seedStr.charAt(depth);
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] == target) {
-                    visited[i][j] = true;
-                    String point = checkPoint(i, j, visited);
-                    getPointStr(depth + 1, sb.append(point), visited);
-                }
-            }
-        }
-
+        int[] arr = nodeList.get(seedStr.charAt(depth));
+        visited[arr[0]][arr[1]] = true;
+        String point = checkPoint(arr[0], arr[1], visited);
+        getPointStr(depth + 1, sb.append(point), visited);
+        visited[arr[0]][arr[1]] = false;
     }
 
     // 모든 경우의 수 탐색
@@ -89,22 +86,15 @@ public class Main {
             // 이미 사용된 알파벳이라면
             if (alpha[target - 'A']) continue;
             alpha[target - 'A'] = true;
-            outer:
-            for (int j = 0; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    if (board[j][k] == target) {
-                        visited[j][k] = true;
-                        point.append(checkPoint(j, k, visited));
-                        seed.append(target);
-                        combination(depth + 1, point, seed, visited);
-                        point.deleteCharAt(point.length() - 1);
-                        seed.deleteCharAt(seed.length() - 1);
-                        alpha[target - 'A'] = false;
-                        visited[j][k] = false;
-                        break outer;
-                    }
-                }
-            }
+            int[] arr = nodeList.get(target);
+            visited[arr[0]][arr[1]] = true;
+            point.append(checkPoint(arr[0], arr[1], visited));
+            seed.append(target);
+            combination(depth + 1, point, seed, visited);
+            point.deleteCharAt(point.length() - 1);
+            seed.deleteCharAt(seed.length() - 1);
+            alpha[target - 'A'] = false;
+            visited[arr[0]][arr[1]] = false;
         }
 
     }
@@ -148,5 +138,17 @@ public class Main {
     }
 
 
+}
+
+class Node {
+    char alpha;
+    int row;
+    int col;
+
+    public Node(char alpha, int row, int col) {
+        this.alpha = alpha;
+        this.row = row;
+        this.col = col;
+    }
 }
 
