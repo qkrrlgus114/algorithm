@@ -29,18 +29,11 @@ public class Main {
         }
         int answer = 0;
 
-        if (A.length() == B.length()) {
-            dfs(new StringBuilder(), A.length());
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) >= a && list.get(i) <= b) answer++;
-            }
-        } else {
-            for (int i = A.length(); i <= B.length(); i++) {
-                dfs(new StringBuilder(), i);
-            }
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) >= a && list.get(i) <= b) answer++;
-            }
+        for (int i = A.length(); i <= B.length(); i++) {
+            dfs(new StringBuilder(), i);
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) >= a && list.get(i) <= b) answer++;
         }
 
         System.out.println(answer);
