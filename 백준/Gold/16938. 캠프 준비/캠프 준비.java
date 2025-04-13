@@ -1,14 +1,11 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-
 
 public class Main {
 
-    static int N, L, R, X;
-    static int[] arr;
-    static int answer = 0;
+    static int N, L, R, X, answer;
+    static int[] problems;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -19,29 +16,29 @@ public class Main {
         R = Integer.parseInt(sa[2]);
         X = Integer.parseInt(sa[3]);
 
-        arr = new int[N];
+        problems = new int[N];
         sa = bf.readLine().split(" ");
-        for(int i=0; i<N; i++){
-            arr[i] = Integer.parseInt(sa[i]);
+        for (int i = 0; i < N; i++) {
+            problems[i] = Integer.parseInt(sa[i]);
         }
 
-        dfs(0, 0, 0, Integer.MAX_VALUE, Integer.MIN_VALUE);
+        combination(0, 0, 0, Integer.MAX_VALUE, Integer.MIN_VALUE, false);
 
         System.out.println(answer);
+
     }
 
-    public static void dfs(int depth, int sum, int count, int min, int max){
-        // 종료 조건
-        if(count >= 2){
-            if((sum >= L && sum <= R) && (Math.abs(max - min) >= X)){
-                answer++;
-            }
+    public static void combination(int depth, int choice, int sum, int minP, int maxP, boolean flag) {
+        if (choice >= 2 && sum >= L && sum <= R && maxP - minP >= X && flag) {
+            answer++;
         }
+        if (depth >= N) return;
 
-        // 재귀 조건
-        for(int i=depth; i<N; i++){
-            dfs(i+1, sum + arr[i], count + 1, Math.min(min, arr[i]), Math.max(max, arr[i]));
-        }
+        // 문제를 고르는 경우
+        combination(depth + 1, choice + 1, sum + problems[depth], Math.min(minP, problems[depth]), Math.max(maxP, problems[depth]), true);
+        // 문제를 안고르는 경우
+        combination(depth + 1, choice, sum, minP, maxP, false);
     }
+
 }
 
