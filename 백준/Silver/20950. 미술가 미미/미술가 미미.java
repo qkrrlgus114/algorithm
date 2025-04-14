@@ -1,64 +1,79 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
-    static int[][] paint;
-    static int[] target = new int[3];
-    static int answer = Integer.MAX_VALUE;
+    static List<Mulgam> mulgamList = new ArrayList<>();
     static int N;
+    static int answer = Integer.MAX_VALUE;
+    static Mulgam gomduri;
+    static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
+
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String s = bf.readLine();
-        N = Integer.parseInt(s);
-
-        // 주어지는 물감들
-        paint = new int[N][3];
-        for(int i=0; i<N; i++){
+        N = Integer.parseInt(bf.readLine());
+        visited = new boolean[N];
+        for (int i = 0; i < N; i++) {
             String[] sa = bf.readLine().split(" ");
-            paint[i][0] = Integer.parseInt(sa[0]);
-            paint[i][1] = Integer.parseInt(sa[1]);
-            paint[i][2] = Integer.parseInt(sa[2]);
+            mulgamList.add(new Mulgam(Integer.parseInt(sa[0]), Integer.parseInt(sa[1]), Integer.parseInt(sa[2])));
         }
-
-        // 만들고자 하는 곰두리색
         String[] sa = bf.readLine().split(" ");
-        for(int i=0; i<3; i++){
-            target[i] = Integer.parseInt(sa[i]);
-        }
+        gomduri = new Mulgam(Integer.parseInt(sa[0]), Integer.parseInt(sa[1]), Integer.parseInt(sa[2]));
 
-        dfs(0, 0, 0, 0,0);
+        combination(0, 0);
 
         System.out.println(answer);
 
     }
 
-    private static void dfs(int depth, int R, int G, int B, int count){
-        // 종료 조건
-        if(count >= 2){
-            int avgR = R / count;
-            int avgG = G / count;
-            int avgB = B / count;
+    public static void combination(int depth, int choice) {
+        if (choice >= 2 && choice <= 7) {
+            int R = 0;
+            int G = 0;
+            int B = 0;
+            for (int i = 0; i < N; i++) {
+                if (visited[i]) {
+                    R += mulgamList.get(i).R;
+                    G += mulgamList.get(i).G;
+                    B += mulgamList.get(i).B;
+                }
+            }
+            R /= choice;
+            G /= choice;
+            B /= choice;
 
-            int diff = Math.abs(target[0] - avgR) + Math.abs(target[1] - avgG) + Math.abs(target[2] - avgB);
-            answer = Math.min(diff, answer);
+            int sum = Math.abs(gomduri.R - R) + Math.abs(gomduri.G - G) + Math.abs(gomduri.B - B);
+            answer = Math.min(answer, sum);
 
-            if(count >= 7) return;
+            if (choice == 7) return;
         }
 
-        // 재귀 조건
-        for(int i=depth; i<N; i++){
-            int pR = paint[i][0];
-            int pG = paint[i][1];
-            int pB = paint[i][2];
 
-            dfs(i + 1, R + pR, G + pG, B + pB, count + 1);
+        for (int i = depth; i < N; i++) {
+            if (visited[i]) continue;
+            visited[i] = true;
+            combination(i, choice + 1);
+            visited[i] = false;
         }
+    }
+
+
+}
+
+class Mulgam {
+    int R;
+    int G;
+    int B;
+
+    public Mulgam(int R, int G, int B) {
+        this.R = R;
+        this.G = G;
+        this.B = B;
     }
 }
 
