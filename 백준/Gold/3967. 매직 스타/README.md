@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 16636 KB, 시간: 444 ms
+메모리: 17912 KB, 시간: 572 ms
 
 ### 분류
 
@@ -12,13 +12,13 @@
 
 ### 제출 일자
 
-2024년 5월 22일 19:32:53
+2025년 4월 16일 12:43:26
 
 ### 문제 설명
 
 <p>매직 스타는 1부터 12까지 숫자가 헥사그램(hexagram)에 채워져 있는 모양으로 이루어져 있다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/upload/images/magicstar.png" style="height:239px; width:230px"></p>
+<p style="text-align: center;"><img alt="" src="" style="height:239px; width:230px"></p>
 
 <p>매직 스타의 이름에 매직이 들어가는 이유는 숫자 네 개로 이루어진 줄의 숫자를 모두 합하면 26이 되기 때문이다. 위의 그림의 여섯 줄에 쓰여 있는 숫자는 다음과 같다.</p>
 
