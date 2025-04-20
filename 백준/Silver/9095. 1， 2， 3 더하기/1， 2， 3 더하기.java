@@ -1,41 +1,42 @@
-
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
 
-	static int[] cnt = new int[12];
+    static int answer = 0;
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws IOException {
 
-		for(int i=1; i<=11; i++){
-			dfs(i, 0);
-		}
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
 
-		int T = Integer.parseInt(bf.readLine());
-		StringBuilder sb = new StringBuilder();
-		for(int i=0; i<T; i++){
-			int num = Integer.parseInt(bf.readLine());
-			sb.append(cnt[num]).append("\n");
-		}
+        int T = Integer.parseInt(bf.readLine());
 
-		System.out.println(sb);
+        for (int t = 0; t < T; t++) {
+            answer = 0;
+            int N = Integer.parseInt(bf.readLine());
 
-	}
+            combination(0, N);
 
-	private static void dfs(int num, int cur){
-		if(num == cur){
-			cnt[num]++;
-			return;
-		}
+            sb.append(answer).append("\n");
+        }
 
-		if(num < cur){
-			return;
-		}
+        System.out.println(sb);
+    }
 
-		for(int i=1; i<=3; i++){
-			dfs(num, cur + i);
-		}
-	}
+    public static void combination(int sum, int N) {
+        if (sum == N) {
+            answer++;
+            return;
+        } else if (sum > N) {
+            return;
+        }
+
+        combination(sum + 1, N);
+        combination(sum + 2, N);
+        combination(sum + 3, N);
+    }
+
+
 }
