@@ -1,42 +1,68 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Main {
 
-    static int[][] memo;
-    static int[][] item;
-    static int K;
-    static int N;
-
+    static int N, K, answer;
+    static int[][] backPack;
+    static int[][] memo; // 최대 가치를 저장해놓을
 
     public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String[] sa = bf.readLine().split(" ");
 
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
+        String[] sa = bf.readLine().split(" ");
         N = Integer.parseInt(sa[0]);
         K = Integer.parseInt(sa[1]);
 
-        memo = new int[K + 1][N + 1];
-        item = new int[N + 1][2];
+        backPack = new int[N][2];
+        memo = new int[N + 1][K + 1];
 
-        for(int i=1; i<=N; i++){
+        for (int i = 0; i < N; i++) {
             sa = bf.readLine().split(" ");
-            item[i][0] = Integer.parseInt(sa[0]);
-            item[i][1] = Integer.parseInt(sa[1]);
+            backPack[i][0] = Integer.parseInt(sa[0]);
+            backPack[i][1] = Integer.parseInt(sa[1]);
         }
 
-        for(int i=0; i<=K; i++){
-            for(int j=1; j<=N; j++){
-                if(i - item[j][0] >= 0){
-                    memo[i][j] = Math.max(memo[i - item[j][0]][j-1] + item[j][1], memo[i][j-1]);
-                }else{
-                    memo[i][j] = memo[i][j-1];
-                }
+        for (int i = 0; i < N + 1; i++) {
+            for (int j = 0; j < K + 1; j++) {
+                memo[i][j] = -1;
             }
         }
 
-        System.out.println(memo[K][N]);
+        dp(0, 0);
+
+
+        int answer = 0;
+        for (int i = 0; i <= N; i++) {
+            for (int j = 0; j <= K; j++) {
+                answer = Math.max(answer, memo[i][j]);
+            }
+        }
+
+        System.out.println(answer);
     }
+
+    public static int dp(int depth, int weight) {
+        if (depth == N) {
+            return 0;
+        }
+
+        if (memo[depth][weight] != -1) {
+            return memo[depth][weight]; // 이미 해당 무게일 때 최대 가치가 들어있음
+        }
+
+        // 고르지 않는 경우
+        int value = dp(depth + 1, weight);
+
+        // 고르는 경우
+        if (weight + backPack[depth][0] <= K) {
+            value = Math.max(value, dp(depth + 1, weight + backPack[depth][0]) + backPack[depth][1]);
+        }
+
+        return memo[depth][weight] = value;
+    }
+
+
 }
