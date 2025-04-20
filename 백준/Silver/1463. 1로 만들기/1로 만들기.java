@@ -1,35 +1,38 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
 
+    static int X;
     static int[] memo;
 
     public static void main(String[] args) throws IOException {
+
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(bf.readLine());
+        X = Integer.parseInt(bf.readLine());
+        memo = new int[X + 1];
 
-        memo = new int[N + 1];
-        if (N >= 3) {
-            memo[2] = memo[3] = 1;
-        } else if (N == 2) {
-            memo[2] = 1;
+        int answer = recur(X);
+
+        System.out.println(answer);
+    }
+
+    public static int recur(int num) {
+        if (num == 1) {
+            return 0;
         }
 
-        for (int i = 4; i <= N; i++) {
-            if (i % 6 == 0) {
-                memo[i] = Math.min(Math.min(memo[i / 2], memo[i / 3]), memo[i - 1]) + 1;
-            } else if (i % 3 == 0) {
-                memo[i] = Math.min(memo[i / 3], memo[i - 1]) + 1;
-            } else if (i % 2 == 0) {
-                memo[i] = Math.min(memo[i / 2], memo[i - 1]) + 1;
-            } else {
-                memo[i] = memo[i - 1] + 1;
-            }
-        }
+        if (memo[num] != 0) return memo[num];
 
-        System.out.println(memo[N]);
+        int min = Integer.MAX_VALUE;
+
+        if (num % 3 == 0) min = Math.min(min, recur(num / 3) + 1);
+        if (num % 2 == 0) min = Math.min(min, recur(num / 2) + 1);
+        min = Math.min(min, recur(num - 1) + 1);
+
+        return memo[num] = min;
     }
 
 
