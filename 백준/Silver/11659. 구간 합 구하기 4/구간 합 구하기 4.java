@@ -8,7 +8,6 @@ public class Main {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
         String[] sa = bf.readLine().split(" ");
-
         int N = Integer.parseInt(sa[0]);
         int M = Integer.parseInt(sa[1]);
 
@@ -18,24 +17,24 @@ public class Main {
             arr[i] = Integer.parseInt(sa[i]);
         }
 
-        // 누적합 배열 생성
         int[] prefix = new int[N + 1];
-        for (int i = 0; i < N; i++) {
-            prefix[i + 1] = prefix[i] + arr[i];
+        for (int i = 1; i <= N; i++) {
+            prefix[i] = prefix[i - 1] + arr[i - 1];
         }
 
         StringBuilder sb = new StringBuilder();
 
-        for (int t = 0; t < M; t++) {
+        for (int i = 0; i < M; i++) {
             sa = bf.readLine().split(" ");
-            int s = Integer.parseInt(sa[0]);
-            int e = Integer.parseInt(sa[1]);
 
-            sb.append(prefix[e] - prefix[s - 1]).append("\n");
+            int start = Integer.parseInt(sa[0]);
+            int end = Integer.parseInt(sa[1]);
+
+            int answer = prefix[end] - prefix[start - 1];
+
+            sb.append(answer).append("\n");
         }
 
         System.out.println(sb);
     }
-
 }
-
