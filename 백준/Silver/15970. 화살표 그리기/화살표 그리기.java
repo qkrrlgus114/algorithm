@@ -12,7 +12,7 @@ public class Main {
 
         int[][] colors = new int[N + 1][N];
         for (int i = 0; i < N + 1; i++) {
-            Arrays.fill(colors[i], 10000);
+            Arrays.fill(colors[i], 100001);
         }
         int[] position = new int[N + 1];
 
@@ -52,7 +52,7 @@ public class Main {
                 } else {
                     answer += Math.min(left, right);
                 }
-                
+
             }
         }
 
