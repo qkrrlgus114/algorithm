@@ -2,53 +2,60 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 
 public class Main {
 
-    static int[] tree;
+    static StringBuilder sb = new StringBuilder();
+    static int N;
     static List<Integer>[] list;
     static boolean[] visited;
+    static int[] result;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = Integer.parseInt(bf.readLine());
-        tree = new int[N + 1];
+        N = Integer.parseInt(bf.readLine());
+
         list = new List[N + 1];
-        visited = new boolean[N + 1];
-        for(int i=0; i<=N; i++){
+        result = new int[N + 1];
+        for (int i = 0; i < N + 1; i++) {
             list[i] = new ArrayList<>();
         }
+        visited = new boolean[N + 1];
 
-        for(int i=1; i<N; i++){
+        for (int i = 0; i < N - 1; i++) {
             String[] sa = bf.readLine().split(" ");
             int start = Integer.parseInt(sa[0]);
             int end = Integer.parseInt(sa[1]);
 
+            // 양쪽 다 넣어야 한다.
             list[start].add(end);
             list[end].add(start);
         }
 
+        visited[1] = true;
         dfs(1);
 
-        StringBuilder sb = new StringBuilder();
-        for(int i=2; i<=N; i++){
-            sb.append(tree[i]).append("\n");
+        for (int i = 2; i < N + 1; i++) {
+            sb.append(result[i]).append("\n");
         }
+        System.out.println(sb.toString());
 
-        System.out.println(sb);
     }
 
-    private static void dfs(int index){
-        visited[index] = true;
-        for(int cur : list[index]){
-            if(visited[cur]) continue;
-            visited[cur] = true;
-            tree[cur] = index;
-            dfs(cur);
+    public static void dfs(int idx) {
+
+        for (int i = 0; i < list[idx].size(); i++) {
+            int next = list[idx].get(i);
+
+            if (visited[next]) continue;
+
+            visited[next] = true;
+            result[next] = idx;
+            dfs(next);
         }
     }
+
+
 }
