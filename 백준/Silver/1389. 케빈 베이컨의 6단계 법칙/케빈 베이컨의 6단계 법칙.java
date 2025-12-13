@@ -61,25 +61,25 @@ public class Main {
         System.out.println(human);
     }
 
-    public static void bfs(int i, int[] result, boolean[] visited) {
+    public static void bfs(int start, int[] result, boolean[] visited) {
         Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{i, 0});
+        visited[start] = true;
+        q.add(new int[]{start, 0});
 
         while (!q.isEmpty()) {
             int[] temp = q.poll();
-            int num = temp[0];
+            int cur = temp[0];
             int cnt = temp[1];
 
-            if (visited[num]) continue;
-            visited[num] = true;
-            if (i != num) {
-                result[num] = Math.min(result[num], cnt);
+            for (int next : list[cur]) {
+                if (!visited[next]) {
+                    visited[next] = true;
+                    result[next] = cnt;
+                    q.add(new int[]{next, cnt + 1});
+                }
             }
 
-            for (int j = 0; j < list[num].size(); j++) {
-                int next = list[num].get(j);
-                q.add(new int[]{next, cnt + 1});
-            }
+
         }
     }
 
