@@ -1,107 +1,115 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
-
 
 public class Main {
 
-    static int W;
-    static int N;
-    static int H;
-    static int[][][] map;
-    static int[][][] result;
-    static Queue<int[]> q = new LinkedList<>();
-    // 상 우 하 좌
-    static int[] dx = {0, 1, 0, -1};
-    static int[] dy = {-1, 0, 1, 0};
-    static int[] dk = {-1, 1};
-    static int max = 0;
+    static int M, N, H;
+    static int[][][] arr;
+    static boolean[][][] visited;
 
+    static int[] dy = {-1, 1, 0, 0};
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dh = {1, -1};
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] s = bf.readLine().split(" ");
-        W = Integer.parseInt(s[0]);
-        N = Integer.parseInt(s[1]);
-        H = Integer.parseInt(s[2]);
+        String[] sa = bf.readLine().split(" ");
+        M = Integer.parseInt(sa[0]);
+        N = Integer.parseInt(sa[1]);
+        H = Integer.parseInt(sa[2]);
 
-        map = new int[H][N][W];
-        result = new int[H][N][W];
+        arr = new int[H][N][M];
+        visited = new boolean[H][N][M];
 
-        for(int k=0; k<H; k++){
+        for (int h = 0; h < H; h++) {
             for (int i = 0; i < N; i++) {
-                s = bf.readLine().split(" ");
-                for (int j = 0; j < W; j++) {
-                    map[k][i][j] = Integer.parseInt(s[j]);
-                    if(Integer.parseInt(s[j]) == -1) result[k][i][j] = Integer.parseInt(s[j]);
+                sa = bf.readLine().split(" ");
+                for (int j = 0; j < M; j++) {
+                    arr[h][i][j] = Integer.parseInt(sa[j]);
                 }
             }
         }
 
-        for(int k=0; k<H; k++){
+        List<int[]> list = new ArrayList<>();
+        for (int h = 0; h < H; h++) {
             for (int i = 0; i < N; i++) {
-                for (int j = 0; j < W; j++) {
-                    if (map[k][i][j] == 1) {
-                        result[k][i][j] = -1;
-                        q.add(new int[]{k, i, j, 0});
+                for (int j = 0; j < M; j++) {
+                    if (arr[h][i][j] == 1) {
+                        list.add(new int[]{h, i, j, 0});
                     }
                 }
             }
         }
 
-        bfs();
+        int reuslt = bfs(list);
 
-        int zeroCount = 0;
-        for(int k=0; k<H; k++){
-            for(int i=0; i<N; i++){
-                for(int j=0; j<W; j++){
-                    if(result[k][i][j] == 0){
-                        zeroCount++;
+        boolean check = true;
+        outer:
+        for (int h = 0; h < H; h++) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    if (arr[h][i][j] == 0 && !visited[h][i][j]) {
+                        check = false;
+                        break outer;
                     }
                 }
             }
         }
 
-        if(zeroCount != 0) System.out.println(-1);
-        else System.out.println(max);
+        System.out.println(check ? reuslt : -1);
     }
 
-    public static void bfs() {
+    public static int bfs(List<int[]> list) {
+
+        Queue<int[]> q = new LinkedList<>();
+        for (int[] arr : list) {
+            q.add(arr);
+        }
+        int result = 0;
+
         while (!q.isEmpty()) {
             int[] temp = q.poll();
-            int k = temp[0];
+            int h = temp[0];
             int y = temp[1];
             int x = temp[2];
-            int count = temp[3];
-            for (int a = 0; a < 4; a++) {
-                int ndx = x + dx[a];
-                int ndy = y + dy[a];
-                if (ndx >= 0 && ndy >= 0 && ndx < W && ndy < N) {
-                    if (map[k][ndy][ndx] == 0 && result[k][ndy][ndx] == 0) {
-                        q.add(new int[]{k, ndy, ndx, count + 1});
-                        if(max < count + 1) max = count + 1;
-                        map[k][ndy][ndx] = 1;
-                        result[k][ndy][ndx] = count + 1;
-                    }
+            int cnt = temp[3];
+
+            // 상하좌우 탐색
+            for (int i = 0; i < 4; i++) {
+                int ndx = dx[i] + x;
+                int ndy = dy[i] + y;
+
+                if (ndx < 0 || ndy < 0 || ndx >= M || ndy >= N || visited[h][ndy][ndx] || arr[h][ndy][ndx] == -1
+                        || arr[h][ndy][ndx] == 1) {
+                    continue;
                 }
+
+                visited[h][ndy][ndx] = true;
+                q.add(new int[]{h, ndy, ndx, cnt + 1});
+                result = Math.max(result, cnt + 1);
             }
-            for(int a=0; a<2; a++){
-                int ndk = k + dk[a];
-                if(ndk >=0 && ndk < H){
-                    if(map[ndk][y][x] == 0 && result[ndk][y][x] == 0){
-                        q.add(new int[]{ndk, y, x, count+1});
-                        if(max < count + 1) max = count + 1;
-                        map[ndk][y][x] = 1;
-                        result[ndk][y][x] = count + 1;
-                    }
+
+            // 위아래 탐색
+            for (int i = 0; i < 2; i++) {
+                int ndh = dh[i] + h;
+
+                if (ndh < 0 || ndh >= H || visited[ndh][y][x] || arr[ndh][y][x] == -1 || arr[ndh][y][x] == 1) {
+                    continue;
                 }
+
+                visited[ndh][y][x] = true;
+                q.add(new int[]{ndh, y, x, cnt + 1});
+                result = Math.max(result, cnt + 1);
             }
         }
-    }
 
+        return result;
+    }
 
 }
