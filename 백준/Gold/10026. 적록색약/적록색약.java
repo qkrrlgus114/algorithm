@@ -1,101 +1,110 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class Main {
 
-    // 1 = R, 2 = G, 3 = B
-    static boolean[][] visited;
-    static int[][] map;
     static int N;
-    // 정상인의 결과
-    static int ori = 0;
-    // 적록색약의 결과
-    static int rg = 0;
-    // 상 우 하 좌
-    static int[] dx = {0, 1, 0, -1};
-    static int[] dy = {-1, 0, 1, 0};
+    static char[][] arr1;
+    static char[][] arr2;
+
+    // 상하좌우
+    static int[] dx = {0, 0, -1, 1};
+    static int[] dy = {-1, 1, 0, 0};
 
     public static void main(String[] args) throws IOException {
-
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String n = bf.readLine();
-        N = Integer.parseInt(n);
 
-        map = new int[N][N];
-        visited = new boolean[N][N];
+        N = Integer.parseInt(bf.readLine());
 
-        for(int i=0; i<N; i++){
-            char[] sa = bf.readLine().toCharArray();
-            for(int j=0; j<N; j++){
-                if(sa[j] == 'R'){
-                    map[i][j] = 1;
-                }else if(sa[j] == 'G'){
-                    map[i][j] = 2;
-                }else{
-                    map[i][j] = 3;
+        arr1 = new char[N][N];
+        arr2 = new char[N][N];
+
+        for (int i = 0; i < N; i++) {
+            char[] chr = bf.readLine().toCharArray();
+
+            arr1[i] = chr.clone();
+            arr2[i] = chr.clone();
+        }
+
+        int result1 = 0;
+        int result2 = 0;
+
+        // 적록색약 bfs
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (arr1[i][j] != 'Q') {
+                    result1++;
+                    nonRGBFS(i, j);
                 }
             }
         }
 
-        // 정상인의 결과
-        for(int i=0; i<N; i++){
-            for(int j=0; j<N; j++){
-                if(!visited[i][j]){
-                    ori++;
-                    // y, x, 색의 값
-                    bfs(i, j, map[i][j]);
+        // 일반 bfs
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (arr2[i][j] != 'Q') {
+                    result2++;
+                    bfs(i, j);
                 }
             }
         }
 
-        // 방문배열 초기화
-        visited = new boolean[N][N];
-        // G 값을 전부 R로 변경.
-        for(int i=0; i<N; i++){
-            for(int j=0; j<N; j++){
-                if(map[i][j] == 2){
-                    map[i][j] = 1;
-                }
-            }
-        }
+        System.out.println(result2 + " " + result1);
 
-        // 적녹색약의 결과
-        for(int i=0; i<N; i++){
-            for(int j=0; j<N; j++){
-                if(!visited[i][j]){
-                    rg++;
-                    // y, x, 색의 값
-                    bfs(i, j, map[i][j]);
-                }
-            }
-        }
-        System.out.println(ori + " " + rg);
     }
 
-    public static void bfs(int y, int x, int color){
+    // 적록색약 bfs
+    public static void nonRGBFS(int y, int x) {
         Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{y, x , color});
-        visited[y][x] = true;
+        q.add(new int[]{y, x});
 
-        while(!q.isEmpty()){
-            int[] temp = q.poll();
-            y = temp[0];
-            x = temp[1];
+        while (!q.isEmpty()) {
+            int[] arr = q.poll();
+            int ny = arr[0];
+            int nx = arr[1];
+            char cur = arr1[ny][nx];
+            arr1[ny][nx] = 'Q';
 
-            for(int i=0; i<4; i++){
-                int ndy = y + dy[i];
-                int ndx = x + dx[i];
-                // 범위 체크
-                if(ndy >= 0 && ndx >= 0 && ndx < N && ndy < N){
-                    // 색이 같은지 파악
-                    if(!visited[ndy][ndx] && color == map[ndy][ndx]){
-                        visited[ndy][ndx] = true;
-                        q.add(new int[]{ndy, ndx, color});
-                    }
+            for (int i = 0; i < 4; i++) {
+                int ndx = nx + dx[i];
+                int ndy = ny + dy[i];
+
+                if (ndx < 0 || ndy < 0 || ndx >= N || ndy >= N || arr1[ndy][ndx] == 'Q') continue;
+                if (cur == 'R' || cur == 'G') {
+                    if (arr1[ndy][ndx] == 'B') continue;
+                } else if (cur != arr1[ndy][ndx]) {
+                    continue;
                 }
+
+                q.add(new int[]{ndy, ndx});
+            }
+        }
+    }
+
+    // 일반 bfs
+    public static void bfs(int y, int x) {
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{y, x});
+
+        while (!q.isEmpty()) {
+            int[] arr = q.poll();
+            int ny = arr[0];
+            int nx = arr[1];
+            char cur = arr2[ny][nx];
+            arr2[ny][nx] = 'Q';
+
+            for (int i = 0; i < 4; i++) {
+                int ndx = nx + dx[i];
+                int ndy = ny + dy[i];
+
+                if (ndx < 0 || ndy < 0 || ndx >= N || ndy >= N || arr2[ndy][ndx] == 'Q') continue;
+                if (cur != arr2[ndy][ndx]) continue;
+
+                q.add(new int[]{ndy, ndx});
             }
         }
     }
