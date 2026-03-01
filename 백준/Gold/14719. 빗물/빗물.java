@@ -1,81 +1,71 @@
-import com.sun.security.jgss.GSSUtil;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class Main {
+
+    static int[] ground;
+    static int answer = 0;
+    static int hIdx = 0; // 가장 높은 곳의 인덱스
+    static int curIdx = 0;
+    static int cur = 0;
+    static int H = 0;
+    static int W = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
         String[] sa = bf.readLine().split(" ");
-        int H = Integer.parseInt(sa[0]);
-        int W = Integer.parseInt(sa[1]);
-        int[] ground = new int[W];
+        H = Integer.parseInt(sa[0]);
+        W = Integer.parseInt(sa[1]);
 
-        int start = 0;
-        int end = W - 1;
-        int maxHStart = 0;
-        int maxHEnd = 0;
-        int maxH = 0;
-
+        ground = new int[W];
         sa = bf.readLine().split(" ");
-        for(int i=0; i<sa.length; i++){
-            int num = Integer.parseInt(sa[i]);
-            ground[i] = num;
-
-            if(num > maxH){
-                maxHStart = i;
-                maxHEnd = i;
-                maxH = num;
-            }else if(num == maxH){
-                maxHEnd = i;
+        int highValue = 0;
+        for (int i = 0; i < W; i++) {
+            ground[i] = Integer.parseInt(sa[i]);
+            if (highValue <= ground[i]) {
+                highValue = ground[i];
+                hIdx = i;
             }
         }
 
-        int answer = 0;
+        // 왼쪽부터 hIdx까지 탐색
+        cur = ground[0];
+        for (int i = 1; i <= hIdx; i++) {
+            if (cur <= ground[i]) {
+                int diffSum = 0;
+                for (int j = curIdx + 1; j < i; j++) {
+                    diffSum += ground[j] - 1;
+                }
 
-        // 처음 ~ 처음 맥스값
-        int nowH = 0;
-        for(int i=start; i<=maxHStart; i++){
-            if(ground[i] <= nowH){
-                answer += nowH - ground[i];
-            }else{
-                nowH = ground[i];
+                answer += ((cur - 1) * (i - curIdx - 1)) - diffSum;
+
+                // 현재값 갱신
+                cur = ground[i];
+                curIdx = i;
             }
         }
 
-        // 마지막 ~ 마지막 맥스값
-        nowH = 0;
-        for(int i=end; i>=maxHEnd; i--){
-            if(ground[i] <= nowH){
-                answer += nowH - ground[i];
-            }else{
-                nowH = ground[i];
-            }
-        }
-        
-        // 처음 맥스값 ~ 마지막 맥스값
-        nowH = 0;
-        for(int i=maxHStart; i<=maxHEnd; i++){
-            if(ground[i] <= nowH){
-                answer += nowH - ground[i];
-            }else{
-                nowH = ground[i];
-            }
-        }
+        // 오른쪽부터 hIdx까지 탐색
+        cur = ground[W - 1];
+        curIdx = W - 1;
+        for (int i = W - 2; i >= hIdx; i--) {
+            if (cur <= ground[i]) {
+                int diffSum = 0;
+                for (int j = curIdx - 1; j > i; j--) {
+                    diffSum += ground[j] - 1;
+                }
 
-        
+                answer += ((cur - 1) * (curIdx - i - 1)) - diffSum;
+
+                cur = ground[i];
+                curIdx = i;
+            }
+        }
 
         System.out.println(answer);
-
     }
 
-}
 
+}
