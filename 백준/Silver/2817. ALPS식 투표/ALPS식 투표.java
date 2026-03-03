@@ -5,53 +5,86 @@ import java.util.*;
 
 public class Main {
 
-    /*
-    * 득표수를 1~14로 나눈 실수를 구한다. -> 이게 스태프의 점수
-    * PQ를 이용한다.
-    * */
+    static int X;
+    static int N;
+    static int minX; // 5% 득표수. 이건 넘어야함
+    static List<Node> nodes = new ArrayList<>();
+    static Map<String, Integer> chips = new HashMap<>();
+
+
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        int X = Integer.parseInt(bf.readLine());
-        int N = Integer.parseInt(bf.readLine());
-        double voteCut = X * 0.05;
-        boolean[] candidate = new boolean[26];
-        PriorityQueue<double[]> pq = new PriorityQueue<>(new Comparator<double[]>(){
-            public int compare(double[] o1, double[] o2){
-                return (int) (o2[0] - o1[0]);
+        X = Integer.parseInt(bf.readLine());
+        N = Integer.parseInt(bf.readLine());
+
+        minX = (int) (X * 0.05);
+
+        List<String[]> list = new ArrayList<>(); // 계산 대상
+        for (int i = 0; i < N; i++) {
+            String[] sa = bf.readLine().split(" ");
+            int value = Integer.parseInt(sa[1]);
+
+            if (value < minX) continue;
+            list.add(new String[]{sa[0], sa[1]});
+        }
+
+        // 1~14로 나눈 득표율 게산
+        for (int i = 0; i < list.size(); i++) {
+            String[] target = list.get(i);
+            // 이름만 넣어둠
+            chips.put(target[0], 0);
+
+            int vote = Integer.parseInt(target[1]);
+
+            // 1~14로 나눈 득표율 게산
+            for (int j = 1; j <= 14; j++) {
+                nodes.add(new Node(target[0], (double) vote / j));
+            }
+        }
+
+        nodes.sort(new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return (int) (o2.value - o1.value);
             }
         });
-        int[] chip = new int[26];
-        Arrays.fill(chip, -1);
 
-        for(int n=0; n<N; n++){
-            String[] sa = bf.readLine().split(" ");
-            int vote = Integer.parseInt(sa[1]);
-            if((double)vote >= voteCut){
-                int index = sa[0].charAt(0) - 'A';
-                chip[index] = 0;
-                candidate[index] = true;
-                for(int i=1; i<=14; i++){
-                    pq.add(new double[]{(double) vote / i, index});
-                }
-            }
+        int idx = 0;
+        for (int i = 0; i < nodes.size(); i++) {
+            if (idx >= 14) break;
+            Node node = nodes.get(idx);
+            chips.put(node.name, chips.get(node.name) + 1);
+
+            idx++;
         }
 
 
-        for(int i=0; i<14; i++){
-            double[] value = pq.poll();
-            int index = (int) value[1];
-            chip[index]++;
-        }
+        List<String> names = new ArrayList<>(chips.keySet());
+        Collections.sort(names);
 
         StringBuilder sb = new StringBuilder();
-        for(int i=0; i<26; i++){
-            if(chip[i] != -1){
-                sb.append((char) (i + 'A')).append(" ").append(chip[i]).append("\n");
-            }
+        for (String name : names) {
+            sb.append(name).append(" ").append(chips.get(name)).append("\n");
         }
 
         System.out.println(sb);
+
     }
 
+
+}
+
+class Node {
+    String name;
+    Double value;
+
+    public Node(String name, Double value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    public String toString() {
+        return name + " " + value;
+    }
 }
