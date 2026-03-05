@@ -22,7 +22,7 @@ public class Main {
         Arrays.sort(product);
 
         // 누적합 배열
-        int[] prefixSum = new int[N + 1];
+        long[] prefixSum = new long[N + 1];
         for (int i = 0; i < N; i++) {
             prefixSum[i + 1] = prefixSum[i] + product[i];
         }
