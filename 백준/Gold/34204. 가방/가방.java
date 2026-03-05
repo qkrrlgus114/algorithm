@@ -14,7 +14,6 @@ public class Main {
         int K = Integer.parseInt(sa[1]);
         int C = Integer.parseInt(sa[2]);
 
-        boolean[] check = new boolean[N];
         int[] product = new int[N];
         sa = bf.readLine().split(" ");
         for (int i = 0; i < N; i++) {
@@ -22,38 +21,30 @@ public class Main {
         }
         Arrays.sort(product);
 
+        // 누적합 배열
+        int[] prefixSum = new int[N + 1];
+        for (int i = 0; i < N; i++) {
+            prefixSum[i + 1] = prefixSum[i] + product[i];
+        }
+
         StringBuilder sb = new StringBuilder();
+        long sum = prefixSum[K];
+        int start = 0;
+        int end = K - 1;
 
-        for (int i = 1; i <= C; i++) {
-            int x = i;
-            int cnt = N; // 남은 상품의 개수
-            for (int j = 0; j < N; j++) {
-                if (x - product[j] >= 0) {
-                    if (cnt == K) break;
-                    check[j] = true; // 못훔쳐감. 상훈이가 챙김
-                    x -= product[j];
-                    cnt--;
+        for (int x = 1; x <= C; x++) {
+            if (prefixSum[start + 1] <= x) {
+                if (end == N - 1) {
+                    sb.append(sum).append("\n");
+                    continue;
                 }
+                end++;
+                sum += product[end] - product[start];
+                start++;
             }
-
-            int value = 0;
-            int k = 0;
-            for (int j = 0; j < N; j++) {
-                if (!check[j] && K > k) {
-                    value += product[j];
-                    k++;
-                }
-            }
-
-            sb.append(value).append("\n");
+            sb.append(sum).append("\n");
         }
 
-        if (N < K) {
-            int value = 0;
-            value += Arrays.stream(product).sum();
-            System.out.println(value);
-        } else {
-            System.out.println(sb);
-        }
+        System.out.println(sb);
     }
 }
