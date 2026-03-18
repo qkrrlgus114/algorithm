@@ -3,34 +3,33 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-
+    
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String s = bf.readLine();
-        int N = Integer.parseInt(s);
+        int N = Integer.parseInt(bf.readLine());
 
-        int start = 1;
-        int end = 1;
-        int count = 1;
+        int answer = 0;
         int sum = 1;
 
-        while(end != N){
+        int l = 1;
+        int r = 1;
 
-            if(sum > N){
-                sum -= start;
-                start++;
-            }else if(sum < N){
-                end++;
-                sum += end;
-            }else{
-                end++;
-                sum += end;
-                count++;
+        while (r <= N) {
+            if (N == sum) {
+                answer++;
+                r++;
+                sum += r;
+            } else if (N > sum) {
+                r++;
+                sum += r;
+            } else {
+                sum -= l;
+                l++;
             }
         }
 
-        System.out.println(count);
-
+        System.out.println(answer);
     }
+
 }
