@@ -1,51 +1,45 @@
-import javax.xml.crypto.dsig.keyinfo.KeyInfo;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
-
-    static int N, M;
-    static int[] trees;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
         String[] sa = bf.readLine().split(" ");
-        N = Integer.parseInt(sa[0]);
-        M = Integer.parseInt(sa[1]);
+        int N = Integer.parseInt(sa[0]);
+        int M = Integer.parseInt(sa[1]);
 
-        trees = new int[N];
-        int max = 0;
+        int answer = Integer.MIN_VALUE;
+
+        int[] tress = new int[N];
         sa = bf.readLine().split(" ");
-        for(int i=0; i<N; i++){
-            trees[i] = Integer.parseInt(sa[i]);
-            max = Math.max(trees[i], max);
+        for (int i = 0; i < N; i++) {
+            tress[i] = Integer.parseInt(sa[i]);
         }
 
-        long result = binarySearch(0, max);
+        int s = 0;
+        int e = 2000000000;
+        while (s <= e) {
+            int m = (s + e) / 2;
 
-        System.out.println(result);
-    }
-
-    public static long binarySearch(int l, int r){
-        long result = 0;
-
-        while(l <= r){
-            int mid = (l + r) / 2;
-
-            long sum = 0;
-            for(Integer tree : trees){
-                sum += tree - mid <= 0 ? 0 : tree -mid;
+            long cutTrees = 0;
+            for (int i = 0; i < tress.length; i++) {
+                if (tress[i] <= m) continue;
+                cutTrees += tress[i] - m;
             }
 
-            if(M <= sum){
-                l = mid + 1;
-                result = Math.max(result, mid);
-            }else{
-                r = mid - 1;
+            if (cutTrees >= M) {
+                answer = Math.max(answer, m);
+                s = m + 1;
+            } else {
+                e = m - 1;
             }
         }
 
-        return result;
+        System.out.println(answer);
     }
+
+
 }
