@@ -1,52 +1,52 @@
-import javax.security.auth.login.AccountNotFoundException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class Main {
 
+    static int N;
+    static int K;
+    static int[] drinks;
+    static long answer = 0;
+
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+
         String[] sa = bf.readLine().split(" ");
-        int N = Integer.parseInt(sa[0]);
-        int K = Integer.parseInt(sa[1]);
+        N = Integer.parseInt(sa[0]);
+        K = Integer.parseInt(sa[1]);
+        drinks = new int[N];
 
-        int[] arr = new int[N];
-        int max = 0;
         for (int i = 0; i < N; i++) {
-            String s = bf.readLine();
-            arr[i] = Integer.parseInt(s);
-            max = Math.max(max, arr[i]);
+            drinks[i] = Integer.parseInt(bf.readLine());
         }
 
-        long l = 0;
-        long r = Integer.MAX_VALUE;
-        long answer = 0;
-
-        while (l <= r) {
-            long mid = (l + r) / 2;
-            // 나눠줄 수 있는 인원의 수
-            long count = 0;
-
-            for (int drink : arr) {
-                count += drink / mid;
-            }
-
-            if (count >= K) {
-                answer = mid;
-                l = mid + 1;
-            } else {
-                r = mid - 1;
-            }
-        }
+        binarySearch();
 
         System.out.println(answer);
 
     }
-}
 
+    private static void binarySearch() {
+        long s = 0;
+        long e = Integer.MAX_VALUE;
+
+        while (s <= e) {
+            // 막걸리 분배 용량
+            long m = (s + e) / 2;
+            long sum = 0;
+            for (int i = 0; i < N; i++) {
+                if (drinks[i] == 0) continue;
+                sum += drinks[i] / m;
+            }
+
+            if (sum >= K) {
+                answer = Math.max(answer, m);
+                s = m + 1;
+            } else {
+                e = m - 1;
+            }
+        }
+    }
+
+}
