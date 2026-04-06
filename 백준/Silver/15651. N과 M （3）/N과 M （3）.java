@@ -4,42 +4,44 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-    static int N, M;
-    static boolean[] visited;
+    static int[] temp;
+    static int N;
+    static int M;
     static StringBuilder sb = new StringBuilder();
-    static int[] arr;
+//    static boolean[] visited;
+
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
         String[] sa = bf.readLine().split(" ");
-
         N = Integer.parseInt(sa[0]);
         M = Integer.parseInt(sa[1]);
 
-        visited = new boolean[N + 1];
-        arr = new int[M];
+        temp = new int[M];
+//        visited = new boolean[N];
 
-        recur(0);
+        dfs(0);
 
         System.out.println(sb);
     }
 
-    public static void recur(int depth) {
+    public static void dfs(int depth) {
         if (depth == M) {
             for (int i = 0; i < M; i++) {
-                sb.append(arr[i]).append(" ");
+                sb.append(temp[i]).append(" ");
             }
             sb.append("\n");
             return;
         }
 
         for (int i = 1; i <= N; i++) {
-//            if (visited[i]) continue;
-//            visited[i] = true;
-            arr[depth] = i;
-            recur(depth + 1);
-//            visited[i] = false;
+//            if (visited[i - 1]) continue;
+            temp[depth] = i;
+//            visited[i - 1] = true;
+            dfs(depth + 1);
+//            visited[i - 1] = false;
         }
     }
+
 }
