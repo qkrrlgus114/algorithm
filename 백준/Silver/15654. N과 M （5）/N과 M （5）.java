@@ -5,22 +5,24 @@ import java.util.Arrays;
 
 public class Main {
 
-    static int N, M;
-    static boolean[] visited = new boolean[10001];
-    static StringBuilder sb = new StringBuilder();
-    static int[] answer;
     static int[] arr;
+    static int[] temp;
+    static int N;
+    static int M;
+    static StringBuilder sb = new StringBuilder();
+    static boolean[] visited;
+
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
         String[] sa = bf.readLine().split(" ");
-
         N = Integer.parseInt(sa[0]);
         M = Integer.parseInt(sa[1]);
 
-        answer = new int[M];
         arr = new int[N];
+        temp = new int[M];
+        visited = new boolean[N];
 
         sa = bf.readLine().split(" ");
         for (int i = 0; i < N; i++) {
@@ -28,26 +30,27 @@ public class Main {
         }
         Arrays.sort(arr);
 
-        recur(0);
+        dfs(0);
 
         System.out.println(sb);
     }
 
-    public static void recur(int depth) {
+    public static void dfs(int depth) {
         if (depth == M) {
             for (int i = 0; i < M; i++) {
-                sb.append(answer[i]).append(" ");
+                sb.append(temp[i]).append(" ");
             }
             sb.append("\n");
             return;
         }
 
         for (int i = 0; i < N; i++) {
-            if (visited[arr[i]]) continue;
-            visited[arr[i]] = true;
-            answer[depth] = arr[i];
-            recur(depth + 1);
-            visited[arr[i]] = false;
+            if (visited[i]) continue;
+            temp[depth] = arr[i];
+            visited[i] = true;
+            dfs(depth + 1);
+            visited[i] = false;
         }
     }
+
 }
