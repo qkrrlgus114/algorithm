@@ -1,56 +1,54 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class Main {
 
-    static int[] lotto;
-    static int k;
-    static List<Integer> pick = new ArrayList<>();
+    /*
+     * 7 <= k <= 12
+     *
+     * 앞에 이미 골랐던 건 건너뛴다.
+     * */
+
     static StringBuilder sb = new StringBuilder();
-    static boolean[] visited;
+    static int[] temp = new int[6];
 
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-
-        while(true){
+        while (true) {
             String[] sa = bf.readLine().split(" ");
-            k = Integer.parseInt(sa[0]);
-            if(k == 0){
-                System.out.println(sb);
-                break;
-            }
-            lotto = new int[k];
-            visited = new boolean[k];
-            for(int i = 0; i < k; i++){
-                lotto[i] = Integer.parseInt(sa[i+1]);
+            if (sa.length == 1) break;
+
+            int[] arr = new int[Integer.parseInt(sa[0])];
+            for (int i = 1; i < sa.length; i++) {
+                arr[i - 1] = Integer.parseInt(sa[i]);
             }
 
-            combination(0, 0);
+            choice(0, arr, 0);
             sb.append("\n");
+        }
+
+        System.out.println(sb.toString());
+
+    }
+
+    public static void choice(int choiceNum, int[] arr, int idx) {
+        if (choiceNum == 6) {
+            // 계산
+            for (int i = 0; i < 6; i++) {
+                sb.append(temp[i]).append(" ");
+            }
+            sb.append("\n");
+            return;
+        }
+
+        for (int i = idx; i < arr.length; i++) {
+            temp[choiceNum] = arr[i];
+            choice(choiceNum + 1, arr, i + 1);
         }
 
     }
 
-    public static void combination(int depth, int cur){
-        if(depth == 6){
-            for(int i : pick){
-                sb.append(i).append(" ");
-            }
-            sb.append("\n");
-        }
 
-        for(int i=cur; i<lotto.length; i++){
-            if(visited[i]) continue;
-            visited[i] = true;
-            pick.add(lotto[i]);
-            combination(depth + 1, i);
-            pick.remove(pick.size() - 1);
-            visited[i] = false;
-        }
-    }
 }
