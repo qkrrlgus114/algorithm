@@ -1,35 +1,44 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
 
 public class Main {
-    static int[][] memo;
-    public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        String s = bf.readLine();
-        int N = Integer.parseInt(s);
+	static int N;
+	static int[] grapeDrinks;
+	static Integer[][] memo;
 
-        memo = new int[4][N+1];
-        int[] wine = new int[N+1];
-        for(int i=1; i<=N; i++){
-            s = bf.readLine();
-            wine[i] = Integer.parseInt(s);
-        }
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        memo[1][1] = 0;
-        memo[2][1] = wine[1];
-        memo[3][1] = wine[1];
+		N = Integer.parseInt(bf.readLine());
+		grapeDrinks = new int[N];
+		memo = new Integer[N][3];
+		for (int i = 0; i < N; i++) {
+			grapeDrinks[i] = Integer.parseInt(bf.readLine());
+		}
 
-        for(int i=2; i<=N; i++){
-            memo[1][i] = Math.max(Math.max(memo[1][i-1], memo[2][i-1]), memo[3][i-1]);
-            memo[2][i] = memo[1][i-1] + wine[i];
-            memo[3][i] = memo[2][i-1] + wine[i];
-        }
+		dfs(0, 0);
+		System.out.println(dfs(0, 0));
+	}
 
-        System.out.println(Math.max(Math.max(memo[1][N], memo[2][N]), memo[3][N]));
+	public static int dfs(int idx, int cnt) {
+		if (idx == N) {
+			return 0;
+		}
 
-    }
+		if (memo[idx][cnt] != null) {
+			return memo[idx][cnt];
+		}
+
+		// 현재 잔 안마심
+		int result = dfs(idx + 1, 0);
+
+		// 현재ㅔ 잔 마심
+		if (cnt < 2) {
+			result = Math.max(result, dfs(idx + 1, cnt + 1) + grapeDrinks[idx]);
+		}
+
+		return memo[idx][cnt] = result;
+	}
 }
-
