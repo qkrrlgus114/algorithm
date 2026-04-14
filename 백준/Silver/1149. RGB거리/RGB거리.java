@@ -1,52 +1,51 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Main {
 
-    static int N;
-    static int answer = Integer.MAX_VALUE;
-    static List<int[]> arr = new ArrayList<>();
-    static int[][] memo;
+	static int N;
+	static int[][] paints;
+	static int[][] dp;
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(bf.readLine());
+		paints = new int[N][3];
+		dp = new int[N][3];
+		for (int i = 0; i < N; i++) {
+			Arrays.fill(dp[i], Integer.MAX_VALUE);
+		}
 
-        N = Integer.parseInt(bf.readLine());
-        memo = new int[N][3];
+		for (int i = 0; i < N; i++) {
+			String[] sa = bf.readLine().split(" ");
+			for (int j = 0; j < 3; j++) {
+				paints[i][j] = Integer.parseInt(sa[j]);
+			}
+		}
 
-        for (int i = 0; i < N; i++) {
-            String[] sa = bf.readLine().split(" ");
-            arr.add(new int[]{Integer.parseInt(sa[0]), Integer.parseInt(sa[1]), Integer.parseInt(sa[2])});
-            Arrays.fill(memo[i], -1);
-        }
+		System.out.println(dfs(-1, 0));
+	}
 
-        int red = dp(0, 0);
-        int green = dp(0, 1);
-        int blue = dp(0, 2);
+	public static int dfs(int pre, int idx) {
+		if (idx == N) {
+			return 0;
+		}
 
-        System.out.println(Math.min(Math.min(red, green), blue));
-    }
+		int answer = Integer.MAX_VALUE;
 
-    public static int dp(int cur, int prev) {
-        if (cur == N) {
-            return 0;
-        }
-        if (memo[cur][prev] != -1) {
-            return memo[cur][prev];
-        }
+		for (int i = 0; i < 3; i++) {
+			if (i == pre) {
+				continue;
+			}
+			if (dp[idx][i] == Integer.MAX_VALUE) {
+				dp[idx][i] = paints[idx][i] + dfs(i, idx + 1);
+			}
+			answer = Math.min(answer, dp[idx][i]);
+		}
 
-        int value = Integer.MAX_VALUE;
-        for (int i = 0; i < 3; i++) {
-            if (i == prev) continue;
-            value = Math.min(value, dp(cur + 1, i) + arr.get(cur)[i]);
-        }
-
-        return memo[cur][prev] = value;
-    }
-
+		return answer;
+	}
 }
